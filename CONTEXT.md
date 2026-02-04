@@ -27,6 +27,7 @@ Current State:
 - Fire only triggers from the Fire button on mobile (mouse left click on desktop).
 - Canvas layout aligned to viewport on mobile.
 - Enemy HP and desktop left-click firing corrected.
+- On-screen enemy HP label added for debugging.
 
 Constraints:
 - Must be free to develop and host

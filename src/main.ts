@@ -25,6 +25,7 @@ class MainScene extends Phaser.Scene {
   private readonly bulletSpeed = 720;
   private lastEnemyHitAt = 0;
   private enemyHp = 20;
+  private enemyHpText!: Phaser.GameObjects.Text;
   private gameStarted = false;
   private startOverlay?: HTMLElement;
   private fireReady = true;
@@ -71,6 +72,12 @@ class MainScene extends Phaser.Scene {
       fontFamily: "sans-serif",
       fontSize: "12px",
       color: "#a9b6c8"
+    }).setOrigin(1, 0);
+
+    this.enemyHpText = this.add.text(GAME_WIDTH - 12, 36, "HP: 20", {
+      fontFamily: "sans-serif",
+      fontSize: "12px",
+      color: "#ffb0b0"
     }).setOrigin(1, 0);
 
     this.player = this.physics.add
@@ -132,9 +139,11 @@ class MainScene extends Phaser.Scene {
         bullet.disableBody(true, true);
 
         this.enemyHp = Math.max(0, this.enemyHp - 1);
+        this.enemyHpText.setText(`HP: ${this.enemyHp}`);
         if (this.enemyHp > 0) return;
 
         this.enemyHp = 20;
+        this.enemyHpText.setText(`HP: ${this.enemyHp}`);
         this.cameras.main.shake(180, 0.01);
         this.cameras.main.flash(200, 255, 120, 80);
 
@@ -153,6 +162,14 @@ class MainScene extends Phaser.Scene {
         );
       }
     );
+
+    this.physics.world.on("worldbounds", (body: Phaser.Physics.Arcade.Body) => {
+      const gameObject = body.gameObject as Phaser.GameObjects.GameObject | undefined;
+      if (!gameObject) return;
+      if (gameObject.texture?.key === "bullet") {
+        (gameObject as Phaser.Physics.Arcade.Image).disableBody(true, true);
+      }
+    });
   }
 
   update() {
@@ -240,13 +257,20 @@ class MainScene extends Phaser.Scene {
 
     const fireButton =
       document.querySelector<HTMLButtonElement>(".action-btn") || undefined;
-    fireButton?.addEventListener("pointerdown", () => this.fireBullet());
-    fireButton?.addEventListener("touchstart", () => this.fireBullet());
-    this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      if (pointer.pointerType === "mouse" && (pointer.leftButtonDown() || pointer.button === 0)) {
-        this.fireBullet();
-      }
-    });
+    if (fireButton) {
+      fireButton.onclick = () => this.fireBullet();
+      fireButton.ontouchstart = () => this.fireBullet();
+    }
+
+    this.input.on(
+      "pointerdown",
+      (pointer: Phaser.Input.Pointer) => {
+        if (pointer.pointerType === "mouse" && pointer.button === 0) {
+          this.fireBullet();
+        }
+      },
+      this
+    );
 
     if (this.music && !this.music.isPlaying) {
       this.sound.unlock();
