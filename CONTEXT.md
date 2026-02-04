@@ -32,6 +32,7 @@ Current State:
 - Background music (`theme.mp3`) plays after first user interaction.
 - Added iOS-friendly touch unlock hooks for background music.
 - Background music unlocks on any user input (keyboard or pointer).
+- Audio unlock flow improved to start on the first gesture.
 
 Constraints:
 - Must be free to develop and host

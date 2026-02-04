@@ -174,6 +174,14 @@ class MainScene extends Phaser.Scene {
     if (this.sound.locked) {
       const unlock = () => {
         this.sound.unlock();
+
+        if (this.music && !this.music.isPlaying) {
+          this.sound.once(Phaser.Sound.Events.UNLOCKED, () => {
+            if (!this.music || this.music.isPlaying) return;
+            this.music.play();
+          });
+        }
+
         if (!this.sound.locked && this.music && !this.music.isPlaying) {
           this.music.play();
         }
