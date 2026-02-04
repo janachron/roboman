@@ -28,7 +28,7 @@ Current State:
 - Game canvas includes bottom buffer for mobile browser UI.
 - Bottom buffer is adaptive (viewport + safe-area); control bar gradient removed.
 - Mobile layout tweaks to keep controls visible and allow pull-to-refresh.
-- Audio assets live in `assets/audio/`.
+- Audio assets live in `public/assets/audio/`.
 - Background music (`theme.mp3`) plays after first user interaction.
 
 Constraints:
