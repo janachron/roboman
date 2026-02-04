@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0f121a;
+  color: #e6f3ff;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+#game {
+  width: 100%;
+  max-width: 900px;
+}
