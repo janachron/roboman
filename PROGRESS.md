@@ -12,3 +12,4 @@ Progress Log
 - GitHub Pages deployed successfully at `https://janachron.github.io/roboman/`.
 - Added a mobile-only on-screen D-pad for movement controls.
 - Added diagonal D-pad buttons and responsive canvas scaling for better mobile fit.
+- Improved mobile D-pad input to support sliding between directions.

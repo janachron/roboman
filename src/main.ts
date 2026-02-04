@@ -15,6 +15,7 @@ class MainScene extends Phaser.Scene {
     left: false,
     right: false
   };
+  private activeDpadPointerId: number | null = null;
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private readonly speed = 220;
 
@@ -94,39 +95,69 @@ class MainScene extends Phaser.Scene {
   }
 
   private registerDpadControls() {
-    const buttons = document.querySelectorAll<HTMLButtonElement>(".dpad-btn");
-    const setDirs = (dirs: (keyof MainScene["dpadState"])[], pressed: boolean) => {
-      dirs.forEach((dir) => {
-        this.dpadState[dir] = pressed;
-      });
+    const dpad = document.querySelector<HTMLElement>(".dpad");
+    if (!dpad) return;
+
+    const resetDpad = () => {
+      this.dpadState = { up: false, down: false, left: false, right: false };
+      this.activeDpadPointerId = null;
     };
 
-    buttons.forEach((btn) => {
-      const dirList = btn.dataset.dir
-        ?.split(",")
-        .map((dir) => dir.trim())
-        .filter(Boolean) as (keyof MainScene["dpadState"])[];
-      if (!dirList || dirList.length === 0) return;
+    const updateFromPoint = (x: number, y: number) => {
+      const rect = dpad.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = x - cx;
+      const dy = y - cy;
 
-      const onDown = (event: Event) => {
-        event.preventDefault();
-        setDirs(dirList, true);
-      };
-      const onUp = (event: Event) => {
-        event.preventDefault();
-        setDirs(dirList, false);
-      };
+      const deadZone = Math.min(rect.width, rect.height) * 0.18;
+      const next = { up: false, down: false, left: false, right: false };
 
-      btn.addEventListener("pointerdown", onDown);
-      btn.addEventListener("pointerup", onUp);
-      btn.addEventListener("pointercancel", onUp);
-      btn.addEventListener("pointerleave", onUp);
-      btn.addEventListener("touchend", onUp);
+      if (Math.abs(dx) < deadZone && Math.abs(dy) < deadZone) {
+        this.dpadState = next;
+        return;
+      }
+
+      if (dx <= -deadZone) next.left = true;
+      if (dx >= deadZone) next.right = true;
+      if (dy <= -deadZone) next.up = true;
+      if (dy >= deadZone) next.down = true;
+
+      this.dpadState = next;
+    };
+
+    dpad.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      if (this.activeDpadPointerId !== null) return;
+      this.activeDpadPointerId = event.pointerId;
+      updateFromPoint(event.clientX, event.clientY);
     });
 
-    window.addEventListener("blur", () => {
-      this.dpadState = { up: false, down: false, left: false, right: false };
+    dpad.addEventListener("pointermove", (event) => {
+      if (event.pointerId !== this.activeDpadPointerId) return;
+      event.preventDefault();
+      updateFromPoint(event.clientX, event.clientY);
     });
+
+    dpad.addEventListener("pointerup", (event) => {
+      if (event.pointerId !== this.activeDpadPointerId) return;
+      event.preventDefault();
+      resetDpad();
+    });
+
+    dpad.addEventListener("pointercancel", (event) => {
+      if (event.pointerId !== this.activeDpadPointerId) return;
+      event.preventDefault();
+      resetDpad();
+    });
+
+    dpad.addEventListener("pointerleave", (event) => {
+      if (event.pointerId !== this.activeDpadPointerId) return;
+      event.preventDefault();
+      resetDpad();
+    });
+
+    window.addEventListener("blur", resetDpad);
   }
 }
 
