@@ -30,6 +30,8 @@ Current State:
 - On-screen enemy HP label added for debugging.
 - Desktop click firing restored; canvas centered on desktop.
 - Desktop click handling fixed after input error.
+- Start-button taps no longer trigger firing on mobile.
+- Enemy visibility reinforced during updates to prevent disappearing.
 
 Constraints:
 - Must be free to develop and host

@@ -15,3 +15,5 @@ Progress Log
 - Added an on-screen enemy HP label to verify damage and updated click handling.
 - Fixed desktop click firing and re-centered canvas on desktop.
 - Fixed desktop click handler error and restored full-height canvas.
+- Prevented start-button taps from firing on mobile; enforced mouse-only firing on desktop.
+- Enemy visibility is now reinforced during updates to prevent disappearing.

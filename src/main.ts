@@ -29,6 +29,7 @@ class MainScene extends Phaser.Scene {
   private gameStarted = false;
   private startOverlay?: HTMLElement;
   private fireReady = true;
+  private fireButton?: HTMLButtonElement;
 
   preload() {
     this.load.audio("theme", ["assets/audio/theme.mp3"]);
@@ -228,6 +229,12 @@ class MainScene extends Phaser.Scene {
     } else {
       this.enemy.setVelocity(0, 0);
     }
+
+    if (this.enemyHp > 0 && (!this.enemy.visible || !this.enemy.active)) {
+      this.enemy.setVisible(true);
+      this.enemy.setActive(true);
+      this.enemy.body.enable = true;
+    }
   }
 
   private setupStartOverlay() {
@@ -263,21 +270,27 @@ class MainScene extends Phaser.Scene {
     this.enemy.body.enable = true;
     this.enemyHp = 20;
 
-    const fireButton =
+    this.fireButton =
       document.querySelector<HTMLButtonElement>(".action-btn") || undefined;
-    if (fireButton) {
-      fireButton.onclick = () => this.fireBullet();
-      fireButton.ontouchstart = () => this.fireBullet();
+    if (this.fireButton) {
+      this.fireButton.onclick = () => this.fireBullet();
+      this.fireButton.ontouchstart = () => this.fireBullet();
     }
 
     this.input.on(
       "pointerdown",
       (pointer: Phaser.Input.Pointer) => {
+        if (pointer.event) {
+          const target = pointer.event.target as HTMLElement | null;
+          if (target?.closest(".start-overlay")) return;
+          if (this.fireButton && target && this.fireButton.contains(target)) return;
+        }
+
         const isMouse =
           pointer.pointerType === "mouse" ||
           (pointer.event && "pointerType" in pointer.event
             ? (pointer.event as PointerEvent).pointerType === "mouse"
-            : true);
+            : false);
         const button =
           pointer.button ??
           (pointer.event && "button" in pointer.event
