@@ -13,3 +13,4 @@ Progress Log
 - Adjusted canvas layout to better align with the viewport on mobile.
 - Fixed desktop left-click firing and ensured enemy HP resets correctly.
 - Added an on-screen enemy HP label to verify damage and updated click handling.
+- Fixed desktop click firing and re-centered canvas on desktop.

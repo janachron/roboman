@@ -140,7 +140,12 @@ class MainScene extends Phaser.Scene {
 
         this.enemyHp = Math.max(0, this.enemyHp - 1);
         this.enemyHpText.setText(`HP: ${this.enemyHp}`);
-        if (this.enemyHp > 0) return;
+        if (this.enemyHp > 0) {
+          enemy.setVisible(true);
+          enemy.setActive(true);
+          enemy.body.enable = true;
+          return;
+        }
 
         this.enemyHp = 20;
         this.enemyHpText.setText(`HP: ${this.enemyHp}`);
@@ -160,6 +165,9 @@ class MainScene extends Phaser.Scene {
           Phaser.Math.Between(60, 480),
           Phaser.Math.Between(80, 880)
         );
+        enemy.setVisible(true);
+        enemy.setActive(true);
+        enemy.body.enable = true;
       }
     );
 
@@ -265,12 +273,19 @@ class MainScene extends Phaser.Scene {
     this.input.on(
       "pointerdown",
       (pointer: Phaser.Input.Pointer) => {
-        if (pointer.pointerType === "mouse" && pointer.button === 0) {
+        const isMouse =
+          pointer.pointerType === "mouse" ||
+          pointer.event?.pointerType === "mouse";
+        if (isMouse && pointer.button === 0) {
           this.fireBullet();
         }
       },
       this
     );
+
+    this.input.mouse?.on("mousedown", (pointer: Phaser.Input.Pointer) => {
+      if (pointer.button === 0) this.fireBullet();
+    });
 
     if (this.music && !this.music.isPlaying) {
       this.sound.unlock();

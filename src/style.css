@@ -31,11 +31,18 @@ body {
   width: auto;
   height: 100%;
   display: block;
+  margin: 0 auto;
 }
 
 @supports (height: 100svh) {
   #game {
     height: 100svh;
+  }
+}
+
+@media (min-width: 900px) and (pointer: fine) {
+  #game {
+    align-items: center;
   }
 }
 
