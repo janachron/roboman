@@ -7,3 +7,4 @@ Progress Log
 - Added `tsconfig.json` and `.gitignore`.
 - Created `index.html`, `src/main.ts`, and `src/style.css` for a minimal Phaser + Vite setup.
 - Added Vite scripts to `package.json` (`dev`, `build`, `preview`).
+- Implemented basic player movement (arrow keys + WASD) with a simple 2-frame walk animation.

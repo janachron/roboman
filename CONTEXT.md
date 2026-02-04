@@ -15,6 +15,9 @@ Scope:
 - Audio: simple music and sound effects
 - Optional: start menu, pause, and restart functionality
 
+Current State:
+- Basic player movement (arrow keys + WASD) and a simple 2-frame walk animation.
+
 Constraints:
 - Must be free to develop and host
 - Should run entirely in the browser (no installs)
