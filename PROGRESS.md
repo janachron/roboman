@@ -11,3 +11,4 @@ Progress Log
 - Fire now only triggers from the Fire button on mobile (mouse left click on desktop).
 - Enemy death now requires 20 hits and triggers a stronger hit effect.
 - Adjusted canvas layout to better align with the viewport on mobile.
+- Fixed desktop left-click firing and ensured enemy HP resets correctly.

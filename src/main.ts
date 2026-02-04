@@ -128,6 +128,7 @@ class MainScene extends Phaser.Scene {
       (bulletObj, enemyObj) => {
         const bullet = bulletObj as Phaser.Physics.Arcade.Image;
         const enemy = enemyObj as Phaser.Physics.Arcade.Sprite;
+        if (!bullet.active) return;
         bullet.disableBody(true, true);
 
         this.enemyHp = Math.max(0, this.enemyHp - 1);
@@ -235,13 +236,14 @@ class MainScene extends Phaser.Scene {
     this.enemy.setActive(true);
     this.enemy.setVisible(true);
     this.enemy.body.enable = true;
+    this.enemyHp = 20;
 
     const fireButton =
       document.querySelector<HTMLButtonElement>(".action-btn") || undefined;
     fireButton?.addEventListener("pointerdown", () => this.fireBullet());
     fireButton?.addEventListener("touchstart", () => this.fireBullet());
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      if (pointer.pointerType === "mouse" && pointer.leftButtonDown()) {
+      if (pointer.pointerType === "mouse" && (pointer.leftButtonDown() || pointer.button === 0)) {
         this.fireBullet();
       }
     });
