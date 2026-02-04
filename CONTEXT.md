@@ -17,6 +17,7 @@ Scope:
 
 Current State:
 - Basic player movement (arrow keys + WASD) and a simple 2-frame walk animation.
+- GitHub Pages deploy configured via Actions.
 
 Constraints:
 - Must be free to develop and host
