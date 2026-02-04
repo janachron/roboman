@@ -33,6 +33,7 @@ Current State:
 - Added iOS-friendly touch unlock hooks for background music.
 - Background music unlocks on any user input (keyboard or pointer).
 - Audio unlock flow improved to start on the first gesture.
+- Player movement speed doubled.
 
 Constraints:
 - Must be free to develop and host

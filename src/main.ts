@@ -18,7 +18,7 @@ class MainScene extends Phaser.Scene {
   private activeDpadPointerId: number | null = null;
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private music?: Phaser.Sound.BaseSound;
-  private readonly speed = 220;
+  private readonly speed = 440;
   private musicUnlockBound = false;
 
   preload() {

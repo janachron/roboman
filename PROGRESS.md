@@ -25,3 +25,4 @@ Progress Log
 - Added extra mobile touch unlock hooks for iOS audio playback.
 - Music now unlocks from any user input (keyboard or pointer).
 - Improved audio unlock flow to avoid needing multiple interactions.
+- Doubled player movement speed.
