@@ -28,3 +28,4 @@ Progress Log
 - Doubled player movement speed.
 - Added a start screen with a button that begins gameplay and music.
 - Doubled player movement speed again.
+- Added a simple enemy that wanders toward the player and triggers a hit flash.

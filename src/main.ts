@@ -17,8 +17,11 @@ class MainScene extends Phaser.Scene {
   };
   private activeDpadPointerId: number | null = null;
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  private enemy!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private music?: Phaser.Sound.BaseSound;
   private readonly speed = 880;
+  private readonly enemySpeed = 180;
+  private lastEnemyHitAt = 0;
   private gameStarted = false;
   private startOverlay?: HTMLElement;
 
@@ -36,6 +39,13 @@ class MainScene extends Phaser.Scene {
     gfx.fillRect(6, 6, 6, 6);
     gfx.fillRect(20, 6, 6, 6);
     gfx.generateTexture("player_step", 32, 32);
+
+    gfx.clear();
+    gfx.fillStyle(0xef5350, 1);
+    gfx.fillRect(0, 0, 36, 36);
+    gfx.fillStyle(0x5d0000, 1);
+    gfx.fillRect(6, 6, 24, 24);
+    gfx.generateTexture("enemy", 36, 36);
     gfx.destroy();
   }
 
@@ -55,6 +65,13 @@ class MainScene extends Phaser.Scene {
     this.player.setActive(false);
     this.player.body.enable = false;
 
+    this.enemy = this.physics.add
+      .sprite(420, 240, "enemy")
+      .setCollideWorldBounds(true);
+    this.enemy.setVisible(false);
+    this.enemy.setActive(false);
+    this.enemy.body.enable = false;
+
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -73,6 +90,17 @@ class MainScene extends Phaser.Scene {
     this.registerDpadControls();
     this.music = this.sound.add("theme", { loop: true, volume: 0.5 });
     this.setupStartOverlay();
+
+    this.physics.add.overlap(this.player, this.enemy, () => {
+      const now = this.time.now;
+      if (now - this.lastEnemyHitAt < 750) return;
+      this.lastEnemyHitAt = now;
+
+      this.cameras.main.flash(120, 255, 60, 60);
+      this.player.setPosition(120, 120);
+      this.enemy.setPosition(420, 240);
+      this.enemy.setVelocity(0, 0);
+    });
   }
 
   update() {
@@ -106,6 +134,23 @@ class MainScene extends Phaser.Scene {
       this.player.anims.stop();
       this.player.setTexture("player_idle");
     }
+
+    const toPlayer = new Phaser.Math.Vector2(
+      this.player.x - this.enemy.x,
+      this.player.y - this.enemy.y
+    );
+    const wander = new Phaser.Math.Vector2(
+      Math.cos(this.time.now / 900),
+      Math.sin(this.time.now / 700)
+    );
+    toPlayer.add(wander.scale(70));
+
+    if (toPlayer.lengthSq() > 0.001) {
+      toPlayer.normalize().scale(this.enemySpeed);
+      this.enemy.setVelocity(toPlayer.x, toPlayer.y);
+    } else {
+      this.enemy.setVelocity(0, 0);
+    }
   }
 
   private setupStartOverlay() {
@@ -135,6 +180,10 @@ class MainScene extends Phaser.Scene {
     this.player.setActive(true);
     this.player.setVisible(true);
     this.player.body.enable = true;
+
+    this.enemy.setActive(true);
+    this.enemy.setVisible(true);
+    this.enemy.body.enable = true;
 
     if (this.music && !this.music.isPlaying) {
       this.sound.unlock();
