@@ -25,6 +25,7 @@ Current State:
 - Mobile layout uses a bottom control bar (1/5 screen) and gameplay in top 4/5.
 - Game canvas uses a portrait resolution with fit scaling for mobile screens.
 - Control bar is overlayed on the bottom of the game canvas to avoid scrolling.
+- Game canvas includes bottom buffer for mobile browser UI.
 
 Constraints:
 - Must be free to develop and host
