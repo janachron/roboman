@@ -15,3 +15,4 @@ Progress Log
 - Improved mobile D-pad input to support sliding between directions.
 - Moved mobile controls into a bottom control bar so gameplay fills the top 4/5 of the screen.
 - Switched game canvas to a portrait resolution with fit scaling for mobile.
+- Overlayed the mobile control bar on top of the game canvas to avoid scrolling.
