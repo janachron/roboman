@@ -27,6 +27,7 @@ class MainScene extends Phaser.Scene {
   private enemyHp = 20;
   private gameStarted = false;
   private startOverlay?: HTMLElement;
+  private fireReady = true;
 
   preload() {
     this.load.audio("theme", ["assets/audio/theme.mp3"]);
@@ -130,13 +131,25 @@ class MainScene extends Phaser.Scene {
         bullet.disableBody(true, true);
 
         this.enemyHp = Math.max(0, this.enemyHp - 1);
-        if (this.enemyHp <= 0) {
-          this.enemyHp = 20;
-          enemy.setPosition(
-            Phaser.Math.Between(60, 480),
-            Phaser.Math.Between(80, 880)
-          );
-        }
+        if (this.enemyHp > 0) return;
+
+        this.enemyHp = 20;
+        this.cameras.main.shake(180, 0.01);
+        this.cameras.main.flash(200, 255, 120, 80);
+
+        enemy.setVelocity(0, 0);
+        enemy.setScale(1.3);
+        this.tweens.add({
+          targets: enemy,
+          scale: 1,
+          duration: 220,
+          ease: "Back.Out"
+        });
+
+        enemy.setPosition(
+          Phaser.Math.Between(60, 480),
+          Phaser.Math.Between(80, 880)
+        );
       }
     );
   }
@@ -227,7 +240,11 @@ class MainScene extends Phaser.Scene {
       document.querySelector<HTMLButtonElement>(".action-btn") || undefined;
     fireButton?.addEventListener("pointerdown", () => this.fireBullet());
     fireButton?.addEventListener("touchstart", () => this.fireBullet());
-    this.input.on("pointerdown", () => this.fireBullet());
+    this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+      if (pointer.pointerType === "mouse" && pointer.leftButtonDown()) {
+        this.fireBullet();
+      }
+    });
 
     if (this.music && !this.music.isPlaying) {
       this.sound.unlock();
@@ -246,6 +263,11 @@ class MainScene extends Phaser.Scene {
 
   private fireBullet() {
     if (!this.gameStarted) return;
+    if (!this.fireReady) return;
+    this.fireReady = false;
+    this.time.delayedCall(150, () => {
+      this.fireReady = true;
+    });
 
     const bullet = this.bullets.get(
       this.player.x,

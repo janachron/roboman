@@ -24,6 +24,8 @@ Current State:
 - Enemy seeks the player; bullets auto-aim to the enemy (tap Fire or mouse click), 20 HP per enemy.
 - Audio assets in `public/assets/audio/`, theme plays on Start.
 - On-screen version label for deployment verification.
+- Fire only triggers from the Fire button on mobile (mouse left click on desktop).
+- Canvas layout aligned to viewport on mobile.
 
 Constraints:
 - Must be free to develop and host

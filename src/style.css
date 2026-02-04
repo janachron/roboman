@@ -14,13 +14,14 @@ body {
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
   min-height: 100vh;
   overflow-y: auto;
+  touch-action: manipulation;
 }
 
 #game {
   width: 100%;
   height: 100dvh;
-  padding-bottom: calc(var(--control-bar-height, 20vh) + env(safe-area-inset-bottom, 0px));
-  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -28,8 +29,14 @@ body {
 
 #game canvas {
   width: auto;
-  height: calc(100dvh - var(--control-bar-height, 20vh) - env(safe-area-inset-bottom, 0px));
+  height: 100%;
   display: block;
+}
+
+@supports (height: 100svh) {
+  #game {
+    height: 100svh;
+  }
 }
 
 .start-overlay {
