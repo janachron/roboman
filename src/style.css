@@ -21,11 +21,14 @@ body {
   height: 100dvh;
   padding-bottom: calc(var(--control-bar-height, 20vh) + env(safe-area-inset-bottom, 0px));
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 #game canvas {
   width: auto;
-  height: 100%;
+  height: calc(100dvh - var(--control-bar-height, 20vh) - env(safe-area-inset-bottom, 0px));
   display: block;
 }
 

@@ -1,32 +1,9 @@
 Progress Log
 
-- Created `CONTEXT.md` with project goals, stack, scope, and constraints.
-- Installed Git Bash.
-- Installed Node.js.
-- Initialized npm project and installed dependencies: `phaser`, `typescript`, and `vite`.
-- Added `tsconfig.json` and `.gitignore`.
-- Created `index.html`, `src/main.ts`, and `src/style.css` for a minimal Phaser + Vite setup.
-- Added Vite scripts to `package.json` (`dev`, `build`, `preview`).
-- Implemented basic player movement (arrow keys + WASD) with a simple 2-frame walk animation.
-- Added `vite.config.ts` with a GitHub Pages base path and a Pages workflow for automated deploys.
-- GitHub Pages deployed successfully at `https://janachron.github.io/roboman/`.
-- Added a mobile-only on-screen D-pad for movement controls.
-- Added diagonal D-pad buttons and responsive canvas scaling for better mobile fit.
-- Improved mobile D-pad input to support sliding between directions.
-- Moved mobile controls into a bottom control bar so gameplay fills the top 4/5 of the screen.
-- Switched game canvas to a portrait resolution with fit scaling for mobile.
-- Overlayed the mobile control bar on top of the game canvas to avoid scrolling.
-- Added a bottom buffer to keep the game canvas above mobile browser UI.
-- Made the bottom buffer adaptive to viewport and safe-area, and removed the control-bar gradient.
-- Tweaked mobile layout to keep controls visible and allow pull-to-refresh.
-- Added `assets/audio/` folder for music and SFX.
-- Wired in `theme.mp3` to play on first user interaction.
-- Moved audio assets to `public/assets/audio/` so Vite serves them in production.
-- Added extra mobile touch unlock hooks for iOS audio playback.
-- Music now unlocks from any user input (keyboard or pointer).
-- Improved audio unlock flow to avoid needing multiple interactions.
-- Doubled player movement speed.
-- Added a start screen with a button that begins gameplay and music.
-- Doubled player movement speed again.
-- Added a simple enemy that wanders toward the player and triggers a hit flash.
-- Added a fire button and auto-aiming bullets for mobile and mouse click.
+- Project scaffolding complete (Phaser + TypeScript + Vite, scripts, configs).
+- GitHub Pages deployment set up and live at `https://janachron.github.io/roboman/`.
+- Mobile-first layout with portrait canvas, overlay controls, and D-pad support.
+- Start screen implemented; gameplay begins and music starts on button press.
+- Core gameplay loop: player movement, enemy that seeks the player, bullets with auto-aim.
+- Audio pipeline added (assets in `public/assets/audio/`, theme music plays on start).
+- Enemy now has 20 HP; bullets deal 1 damage each.

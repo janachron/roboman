@@ -24,6 +24,7 @@ class MainScene extends Phaser.Scene {
   private readonly enemySpeed = 180;
   private readonly bulletSpeed = 720;
   private lastEnemyHitAt = 0;
+  private enemyHp = 20;
   private gameStarted = false;
   private startOverlay?: HTMLElement;
 
@@ -121,7 +122,15 @@ class MainScene extends Phaser.Scene {
         const bullet = bulletObj as Phaser.Physics.Arcade.Image;
         const enemy = enemyObj as Phaser.Physics.Arcade.Sprite;
         bullet.disableBody(true, true);
-        enemy.setPosition(Phaser.Math.Between(60, 480), Phaser.Math.Between(80, 880));
+
+        this.enemyHp = Math.max(0, this.enemyHp - 1);
+        if (this.enemyHp <= 0) {
+          this.enemyHp = 20;
+          enemy.setPosition(
+            Phaser.Math.Between(60, 480),
+            Phaser.Math.Between(80, 880)
+          );
+        }
       }
     );
   }
