@@ -18,3 +18,4 @@ Progress Log
 - Overlayed the mobile control bar on top of the game canvas to avoid scrolling.
 - Added a bottom buffer to keep the game canvas above mobile browser UI.
 - Made the bottom buffer adaptive to viewport and safe-area, and removed the control-bar gradient.
+- Tweaked mobile layout to keep controls visible and allow pull-to-refresh.

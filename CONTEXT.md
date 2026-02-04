@@ -27,6 +27,7 @@ Current State:
 - Control bar is overlayed on the bottom of the game canvas to avoid scrolling.
 - Game canvas includes bottom buffer for mobile browser UI.
 - Bottom buffer is adaptive (viewport + safe-area); control bar gradient removed.
+- Mobile layout tweaks to keep controls visible and allow pull-to-refresh.
 
 Constraints:
 - Must be free to develop and host
