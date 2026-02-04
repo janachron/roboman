@@ -7,15 +7,18 @@
   </head>
   <body>
     <div id="game"></div>
-    <div class="dpad" aria-label="On-screen controls">
-      <button class="dpad-btn up-left" data-dir="up,left" aria-label="Up Left"></button>
-      <button class="dpad-btn up" data-dir="up" aria-label="Up"></button>
-      <button class="dpad-btn up-right" data-dir="up,right" aria-label="Up Right"></button>
-      <button class="dpad-btn left" data-dir="left" aria-label="Left"></button>
-      <button class="dpad-btn right" data-dir="right" aria-label="Right"></button>
-      <button class="dpad-btn down-left" data-dir="down,left" aria-label="Down Left"></button>
-      <button class="dpad-btn down" data-dir="down" aria-label="Down"></button>
-      <button class="dpad-btn down-right" data-dir="down,right" aria-label="Down Right"></button>
+    <div class="control-bar" aria-label="On-screen controls">
+      <div class="dpad" aria-label="Directional pad">
+        <button class="dpad-btn up-left" data-dir="up,left" aria-label="Up Left"></button>
+        <button class="dpad-btn up" data-dir="up" aria-label="Up"></button>
+        <button class="dpad-btn up-right" data-dir="up,right" aria-label="Up Right"></button>
+        <button class="dpad-btn left" data-dir="left" aria-label="Left"></button>
+        <button class="dpad-btn right" data-dir="right" aria-label="Right"></button>
+        <button class="dpad-btn down-left" data-dir="down,left" aria-label="Down Left"></button>
+        <button class="dpad-btn down" data-dir="down" aria-label="Down"></button>
+        <button class="dpad-btn down-right" data-dir="down,right" aria-label="Down Right"></button>
+      </div>
+      <div class="actions" aria-label="Action buttons"></div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

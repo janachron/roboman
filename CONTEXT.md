@@ -22,6 +22,7 @@ Current State:
 - Mobile-only on-screen D-pad for movement controls.
 - Diagonal D-pad buttons and responsive canvas scaling for mobile screens.
 - D-pad supports sliding between directions without lifting.
+- Mobile layout uses a bottom control bar (1/5 screen) and gameplay in top 4/5.
 
 Constraints:
 - Must be free to develop and host

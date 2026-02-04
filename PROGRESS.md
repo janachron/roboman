@@ -13,3 +13,4 @@ Progress Log
 - Added a mobile-only on-screen D-pad for movement controls.
 - Added diagonal D-pad buttons and responsive canvas scaling for better mobile fit.
 - Improved mobile D-pad input to support sliding between directions.
+- Moved mobile controls into a bottom control bar so gameplay fills the top 4/5 of the screen.
