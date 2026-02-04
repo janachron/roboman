@@ -14,3 +14,4 @@ Progress Log
 - Fixed desktop left-click firing and ensured enemy HP resets correctly.
 - Added an on-screen enemy HP label to verify damage and updated click handling.
 - Fixed desktop click firing and re-centered canvas on desktop.
+- Fixed desktop click handler error and restored full-height canvas.

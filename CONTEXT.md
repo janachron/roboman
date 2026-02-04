@@ -29,6 +29,7 @@ Current State:
 - Enemy HP and desktop left-click firing corrected.
 - On-screen enemy HP label added for debugging.
 - Desktop click firing restored; canvas centered on desktop.
+- Desktop click handling fixed after input error.
 
 Constraints:
 - Must be free to develop and host

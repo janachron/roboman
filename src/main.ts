@@ -275,17 +275,20 @@ class MainScene extends Phaser.Scene {
       (pointer: Phaser.Input.Pointer) => {
         const isMouse =
           pointer.pointerType === "mouse" ||
-          pointer.event?.pointerType === "mouse";
-        if (isMouse && pointer.button === 0) {
+          (pointer.event && "pointerType" in pointer.event
+            ? (pointer.event as PointerEvent).pointerType === "mouse"
+            : true);
+        const button =
+          pointer.button ??
+          (pointer.event && "button" in pointer.event
+            ? (pointer.event as MouseEvent).button
+            : 0);
+        if (isMouse && button === 0) {
           this.fireBullet();
         }
       },
       this
     );
-
-    this.input.mouse?.on("mousedown", (pointer: Phaser.Input.Pointer) => {
-      if (pointer.button === 0) this.fireBullet();
-    });
 
     if (this.music && !this.music.isPlaying) {
       this.sound.unlock();
