@@ -31,6 +31,7 @@ Current State:
 - Audio assets live in `public/assets/audio/`.
 - Background music (`theme.mp3`) plays after first user interaction.
 - Added iOS-friendly touch unlock hooks for background music.
+- Background music unlocks on any user input (keyboard or pointer).
 
 Constraints:
 - Must be free to develop and host

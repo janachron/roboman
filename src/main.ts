@@ -179,8 +179,8 @@ class MainScene extends Phaser.Scene {
         }
       };
       if (!this.musicUnlockBound) {
-        this.input.once("pointerdown", unlock);
         this.input.keyboard.once("keydown", unlock);
+        window.addEventListener("keydown", unlock, { once: true });
 
         const canvas = this.game.canvas;
         if (canvas) {
@@ -195,6 +195,7 @@ class MainScene extends Phaser.Scene {
         }
 
         document.addEventListener("touchstart", unlock, { once: true });
+        document.addEventListener("pointerdown", unlock, { once: true });
         this.musicUnlockBound = true;
       }
       return;
