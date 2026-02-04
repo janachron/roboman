@@ -161,17 +161,20 @@ class MainScene extends Phaser.Scene {
   }
 }
 
+const GAME_WIDTH = 540;
+const GAME_HEIGHT = 960;
+
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 450,
+  width: GAME_WIDTH,
+  height: GAME_HEIGHT,
   backgroundColor: "#1b1f2a",
   parent: "game",
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 800,
-    height: 450
+    width: GAME_WIDTH,
+    height: GAME_HEIGHT
   },
   physics: {
     default: "arcade",

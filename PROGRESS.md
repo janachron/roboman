@@ -14,3 +14,4 @@ Progress Log
 - Added diagonal D-pad buttons and responsive canvas scaling for better mobile fit.
 - Improved mobile D-pad input to support sliding between directions.
 - Moved mobile controls into a bottom control bar so gameplay fills the top 4/5 of the screen.
+- Switched game canvas to a portrait resolution with fit scaling for mobile.
