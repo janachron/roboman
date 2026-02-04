@@ -11,3 +11,4 @@ Progress Log
 - Added `vite.config.ts` with a GitHub Pages base path and a Pages workflow for automated deploys.
 - GitHub Pages deployed successfully at `https://janachron.github.io/roboman/`.
 - Added a mobile-only on-screen D-pad for movement controls.
+- Added diagonal D-pad buttons and responsive canvas scaling for better mobile fit.

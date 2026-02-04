@@ -20,6 +20,7 @@ Current State:
 - GitHub Pages deploy configured via Actions.
 - Live demo deployed at `https://janachron.github.io/roboman/`.
 - Mobile-only on-screen D-pad for movement controls.
+- Diagonal D-pad buttons and responsive canvas scaling for mobile screens.
 
 Constraints:
 - Must be free to develop and host

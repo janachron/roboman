@@ -95,21 +95,26 @@ class MainScene extends Phaser.Scene {
 
   private registerDpadControls() {
     const buttons = document.querySelectorAll<HTMLButtonElement>(".dpad-btn");
-    const setDir = (dir: keyof MainScene["dpadState"], pressed: boolean) => {
-      this.dpadState[dir] = pressed;
+    const setDirs = (dirs: (keyof MainScene["dpadState"])[], pressed: boolean) => {
+      dirs.forEach((dir) => {
+        this.dpadState[dir] = pressed;
+      });
     };
 
     buttons.forEach((btn) => {
-      const dir = btn.dataset.dir as keyof MainScene["dpadState"] | undefined;
-      if (!dir) return;
+      const dirList = btn.dataset.dir
+        ?.split(",")
+        .map((dir) => dir.trim())
+        .filter(Boolean) as (keyof MainScene["dpadState"])[];
+      if (!dirList || dirList.length === 0) return;
 
       const onDown = (event: Event) => {
         event.preventDefault();
-        setDir(dir, true);
+        setDirs(dirList, true);
       };
       const onUp = (event: Event) => {
         event.preventDefault();
-        setDir(dir, false);
+        setDirs(dirList, false);
       };
 
       btn.addEventListener("pointerdown", onDown);
@@ -131,6 +136,12 @@ const config: Phaser.Types.Core.GameConfig = {
   height: 450,
   backgroundColor: "#1b1f2a",
   parent: "game",
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 800,
+    height: 450
+  },
   physics: {
     default: "arcade",
     arcade: {
