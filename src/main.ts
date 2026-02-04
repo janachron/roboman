@@ -18,9 +18,11 @@ class MainScene extends Phaser.Scene {
   private activeDpadPointerId: number | null = null;
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private enemy!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  private bullets!: Phaser.Physics.Arcade.Group;
   private music?: Phaser.Sound.BaseSound;
   private readonly speed = 880;
   private readonly enemySpeed = 180;
+  private readonly bulletSpeed = 720;
   private lastEnemyHitAt = 0;
   private gameStarted = false;
   private startOverlay?: HTMLElement;
@@ -46,6 +48,11 @@ class MainScene extends Phaser.Scene {
     gfx.fillStyle(0x5d0000, 1);
     gfx.fillRect(6, 6, 24, 24);
     gfx.generateTexture("enemy", 36, 36);
+
+    gfx.clear();
+    gfx.fillStyle(0xfff59d, 1);
+    gfx.fillRect(0, 0, 10, 4);
+    gfx.generateTexture("bullet", 10, 4);
     gfx.destroy();
   }
 
@@ -71,6 +78,11 @@ class MainScene extends Phaser.Scene {
     this.enemy.setVisible(false);
     this.enemy.setActive(false);
     this.enemy.body.enable = false;
+
+    this.bullets = this.physics.add.group({
+      defaultKey: "bullet",
+      maxSize: 40
+    });
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys({
@@ -101,6 +113,17 @@ class MainScene extends Phaser.Scene {
       this.enemy.setPosition(420, 240);
       this.enemy.setVelocity(0, 0);
     });
+
+    this.physics.add.overlap(
+      this.bullets,
+      this.enemy,
+      (bulletObj, enemyObj) => {
+        const bullet = bulletObj as Phaser.Physics.Arcade.Image;
+        const enemy = enemyObj as Phaser.Physics.Arcade.Sprite;
+        bullet.disableBody(true, true);
+        enemy.setPosition(Phaser.Math.Between(60, 480), Phaser.Math.Between(80, 880));
+      }
+    );
   }
 
   update() {
@@ -185,6 +208,12 @@ class MainScene extends Phaser.Scene {
     this.enemy.setVisible(true);
     this.enemy.body.enable = true;
 
+    const fireButton =
+      document.querySelector<HTMLButtonElement>(".action-btn") || undefined;
+    fireButton?.addEventListener("pointerdown", () => this.fireBullet());
+    fireButton?.addEventListener("touchstart", () => this.fireBullet());
+    this.input.on("pointerdown", () => this.fireBullet());
+
     if (this.music && !this.music.isPlaying) {
       this.sound.unlock();
 
@@ -198,6 +227,39 @@ class MainScene extends Phaser.Scene {
 
       this.music.play();
     }
+  }
+
+  private fireBullet() {
+    if (!this.gameStarted) return;
+
+    const bullet = this.bullets.get(
+      this.player.x,
+      this.player.y,
+      "bullet"
+    ) as Phaser.Physics.Arcade.Image | null;
+    if (!bullet) return;
+
+    bullet.setActive(true);
+    bullet.setVisible(true);
+    bullet.body.enable = true;
+    bullet.setCollideWorldBounds(true);
+    bullet.body.onWorldBounds = true;
+
+    const toEnemy = new Phaser.Math.Vector2(
+      this.enemy.x - this.player.x,
+      this.enemy.y - this.player.y
+    );
+    if (toEnemy.lengthSq() === 0) {
+      toEnemy.set(1, 0);
+    }
+    toEnemy.normalize().scale(this.bulletSpeed);
+
+    bullet.setVelocity(toEnemy.x, toEnemy.y);
+    bullet.setRotation(Math.atan2(toEnemy.y, toEnemy.x));
+
+    this.time.delayedCall(900, () => {
+      if (bullet.active) bullet.disableBody(true, true);
+    });
   }
 
   private registerDpadControls() {

@@ -85,6 +85,25 @@ body {
 
 .actions {
   pointer-events: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.action-btn {
+  width: min(24vw, 110px);
+  height: min(24vw, 110px);
+  border-radius: 50%;
+  border: 2px solid #2f3b52;
+  background: radial-gradient(circle at 30% 30%, #23314a, #121a28);
+  color: #e6f3ff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.action-btn:active {
+  transform: translateY(1px);
 }
 .dpad-btn {
   background: #1b2333;

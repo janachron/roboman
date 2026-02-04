@@ -29,3 +29,4 @@ Progress Log
 - Added a start screen with a button that begins gameplay and music.
 - Doubled player movement speed again.
 - Added a simple enemy that wanders toward the player and triggers a hit flash.
+- Added a fire button and auto-aiming bullets for mobile and mouse click.

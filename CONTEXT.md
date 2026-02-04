@@ -37,6 +37,7 @@ Current State:
 - Start screen with centered button gates gameplay and music.
 - Player movement speed doubled again.
 - Enemy entity added that slowly seeks the player and triggers a hit flash on contact.
+- Fire button and mouse click now shoot auto-aimed bullets.
 
 Constraints:
 - Must be free to develop and host
