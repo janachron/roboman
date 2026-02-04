@@ -17,9 +17,12 @@ class MainScene extends Phaser.Scene {
   };
   private activeDpadPointerId: number | null = null;
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  private music?: Phaser.Sound.BaseSound;
   private readonly speed = 220;
 
   preload() {
+    this.load.audio("theme", ["assets/audio/theme.mp3"]);
+
     const gfx = this.add.graphics();
     gfx.fillStyle(0x4dd0e1, 1);
     gfx.fillRect(0, 0, 32, 32);
@@ -61,6 +64,9 @@ class MainScene extends Phaser.Scene {
     });
 
     this.registerDpadControls();
+
+    this.music = this.sound.add("theme", { loop: true, volume: 0.5 });
+    this.tryStartMusic();
   }
 
   update() {
@@ -158,6 +164,25 @@ class MainScene extends Phaser.Scene {
     });
 
     window.addEventListener("blur", resetDpad);
+  }
+
+  private tryStartMusic() {
+    if (!this.music || this.music.isPlaying) return;
+    this.sound.unlock();
+
+    if (this.sound.locked) {
+      const unlock = () => {
+        this.sound.unlock();
+        if (!this.sound.locked && this.music && !this.music.isPlaying) {
+          this.music.play();
+        }
+      };
+      this.input.once("pointerdown", unlock);
+      this.input.keyboard.once("keydown", unlock);
+      return;
+    }
+
+    this.music.play();
   }
 }
 

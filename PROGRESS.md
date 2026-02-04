@@ -19,3 +19,5 @@ Progress Log
 - Added a bottom buffer to keep the game canvas above mobile browser UI.
 - Made the bottom buffer adaptive to viewport and safe-area, and removed the control-bar gradient.
 - Tweaked mobile layout to keep controls visible and allow pull-to-refresh.
+- Added `assets/audio/` folder for music and SFX.
+- Wired in `theme.mp3` to play on first user interaction.
