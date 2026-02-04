@@ -66,6 +66,12 @@ class MainScene extends Phaser.Scene {
       color: "#e6f3ff"
     });
 
+    this.add.text(GAME_WIDTH - 12, 18, "v0.1.7", {
+      fontFamily: "sans-serif",
+      fontSize: "12px",
+      color: "#a9b6c8"
+    }).setOrigin(1, 0);
+
     this.player = this.physics.add
       .sprite(120, 120, "player_idle")
       .setCollideWorldBounds(true);

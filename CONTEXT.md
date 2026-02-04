@@ -23,6 +23,7 @@ Current State:
 - Player movement (keyboard + D-pad), faster speed, and simple walk animation.
 - Enemy seeks the player; bullets auto-aim to the enemy (tap Fire or mouse click), 20 HP per enemy.
 - Audio assets in `public/assets/audio/`, theme plays on Start.
+- On-screen version label for deployment verification.
 
 Constraints:
 - Must be free to develop and host
