@@ -30,6 +30,7 @@ Current State:
 - Mobile layout tweaks to keep controls visible and allow pull-to-refresh.
 - Audio assets live in `public/assets/audio/`.
 - Background music (`theme.mp3`) plays after first user interaction.
+- Added iOS-friendly touch unlock hooks for background music.
 
 Constraints:
 - Must be free to develop and host

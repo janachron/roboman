@@ -19,6 +19,7 @@ class MainScene extends Phaser.Scene {
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private music?: Phaser.Sound.BaseSound;
   private readonly speed = 220;
+  private musicUnlockBound = false;
 
   preload() {
     this.load.audio("theme", ["assets/audio/theme.mp3"]);
@@ -177,8 +178,25 @@ class MainScene extends Phaser.Scene {
           this.music.play();
         }
       };
-      this.input.once("pointerdown", unlock);
-      this.input.keyboard.once("keydown", unlock);
+      if (!this.musicUnlockBound) {
+        this.input.once("pointerdown", unlock);
+        this.input.keyboard.once("keydown", unlock);
+
+        const canvas = this.game.canvas;
+        if (canvas) {
+          canvas.addEventListener("touchstart", unlock, { once: true });
+          canvas.addEventListener("pointerdown", unlock, { once: true });
+        }
+
+        const controlBar = document.querySelector(".control-bar");
+        if (controlBar) {
+          controlBar.addEventListener("touchstart", unlock, { once: true });
+          controlBar.addEventListener("pointerdown", unlock, { once: true });
+        }
+
+        document.addEventListener("touchstart", unlock, { once: true });
+        this.musicUnlockBound = true;
+      }
       return;
     }
 

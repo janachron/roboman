@@ -22,3 +22,4 @@ Progress Log
 - Added `assets/audio/` folder for music and SFX.
 - Wired in `theme.mp3` to play on first user interaction.
 - Moved audio assets to `public/assets/audio/` so Vite serves them in production.
+- Added extra mobile touch unlock hooks for iOS audio playback.
