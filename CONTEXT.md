@@ -33,6 +33,8 @@ Current State:
 - Start-button taps no longer trigger firing on mobile.
 - Enemy visibility reinforced during updates to prevent disappearing.
 - Desktop firing uses a mouse down fallback.
+- Desktop firing also listens to document pointerdown; enemy visibility reinforced.
+- Desktop firing uses mouse down only (touch-guarded).
 
 Constraints:
 - Must be free to develop and host

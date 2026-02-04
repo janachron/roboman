@@ -18,3 +18,5 @@ Progress Log
 - Prevented start-button taps from firing on mobile; enforced mouse-only firing on desktop.
 - Enemy visibility is now reinforced during updates to prevent disappearing.
 - Added a desktop mousedown fallback for firing.
+- Added document pointerdown fallback for desktop firing and enforced enemy visibility.
+- Simplified desktop firing to mouse down with touch-guard.

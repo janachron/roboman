@@ -84,6 +84,7 @@ class MainScene extends Phaser.Scene {
     this.player = this.physics.add
       .sprite(120, 120, "player_idle")
       .setCollideWorldBounds(true);
+    this.player.setDepth(2);
     this.player.setVisible(false);
     this.player.setActive(false);
     this.player.body.enable = false;
@@ -91,6 +92,7 @@ class MainScene extends Phaser.Scene {
     this.enemy = this.physics.add
       .sprite(420, 240, "enemy")
       .setCollideWorldBounds(true);
+    this.enemy.setDepth(1);
     this.enemy.setVisible(false);
     this.enemy.setActive(false);
     this.enemy.body.enable = false;
@@ -234,6 +236,8 @@ class MainScene extends Phaser.Scene {
       this.enemy.setVisible(true);
       this.enemy.setActive(true);
       this.enemy.body.enable = true;
+      this.enemy.setAlpha(1);
+      this.enemy.setScale(1);
     }
   }
 
@@ -303,11 +307,16 @@ class MainScene extends Phaser.Scene {
       this
     );
 
-    window.addEventListener("mousedown", (event) => {
+    const desktopMouseFire = (event: MouseEvent) => {
+      const isTouchLike =
+        (event as any).sourceCapabilities?.firesTouchEvents === true;
+      if (isTouchLike) return;
       if (event.button === 0) {
         this.fireBullet();
       }
-    });
+    };
+
+    document.addEventListener("mousedown", desktopMouseFire);
 
     if (this.music && !this.music.isPlaying) {
       this.sound.unlock();
