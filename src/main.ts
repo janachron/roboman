@@ -303,6 +303,12 @@ class MainScene extends Phaser.Scene {
       this
     );
 
+    window.addEventListener("mousedown", (event) => {
+      if (event.button === 0) {
+        this.fireBullet();
+      }
+    });
+
     if (this.music && !this.music.isPlaying) {
       this.sound.unlock();
 

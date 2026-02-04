@@ -32,6 +32,7 @@ Current State:
 - Desktop click handling fixed after input error.
 - Start-button taps no longer trigger firing on mobile.
 - Enemy visibility reinforced during updates to prevent disappearing.
+- Desktop firing uses a mouse down fallback.
 
 Constraints:
 - Must be free to develop and host

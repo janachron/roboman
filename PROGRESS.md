@@ -17,3 +17,4 @@ Progress Log
 - Fixed desktop click handler error and restored full-height canvas.
 - Prevented start-button taps from firing on mobile; enforced mouse-only firing on desktop.
 - Enemy visibility is now reinforced during updates to prevent disappearing.
+- Added a desktop mousedown fallback for firing.
