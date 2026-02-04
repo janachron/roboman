@@ -9,3 +9,5 @@ Progress Log
 - Added Vite scripts to `package.json` (`dev`, `build`, `preview`).
 - Implemented basic player movement (arrow keys + WASD) with a simple 2-frame walk animation.
 - Added `vite.config.ts` with a GitHub Pages base path and a Pages workflow for automated deploys.
+- GitHub Pages deployed successfully at `https://janachron.github.io/roboman/`.
+- Added a mobile-only on-screen D-pad for movement controls.

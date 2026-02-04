@@ -9,6 +9,12 @@ class MainScene extends Phaser.Scene {
     left: Phaser.Input.Keyboard.Key;
     right: Phaser.Input.Keyboard.Key;
   };
+  private dpadState = {
+    up: false,
+    down: false,
+    left: false,
+    right: false
+  };
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private readonly speed = 220;
 
@@ -52,16 +58,24 @@ class MainScene extends Phaser.Scene {
       frameRate: 6,
       repeat: -1
     });
+
+    this.registerDpadControls();
   }
 
   update() {
     let vx = 0;
     let vy = 0;
 
-    const left = this.cursors.left?.isDown || this.keys.left.isDown;
-    const right = this.cursors.right?.isDown || this.keys.right.isDown;
-    const up = this.cursors.up?.isDown || this.keys.up.isDown;
-    const down = this.cursors.down?.isDown || this.keys.down.isDown;
+    const left =
+      this.cursors.left?.isDown || this.keys.left.isDown || this.dpadState.left;
+    const right =
+      this.cursors.right?.isDown ||
+      this.keys.right.isDown ||
+      this.dpadState.right;
+    const up =
+      this.cursors.up?.isDown || this.keys.up.isDown || this.dpadState.up;
+    const down =
+      this.cursors.down?.isDown || this.keys.down.isDown || this.dpadState.down;
 
     if (left) vx = -this.speed;
     else if (right) vx = this.speed;
@@ -77,6 +91,37 @@ class MainScene extends Phaser.Scene {
       this.player.anims.stop();
       this.player.setTexture("player_idle");
     }
+  }
+
+  private registerDpadControls() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>(".dpad-btn");
+    const setDir = (dir: keyof MainScene["dpadState"], pressed: boolean) => {
+      this.dpadState[dir] = pressed;
+    };
+
+    buttons.forEach((btn) => {
+      const dir = btn.dataset.dir as keyof MainScene["dpadState"] | undefined;
+      if (!dir) return;
+
+      const onDown = (event: Event) => {
+        event.preventDefault();
+        setDir(dir, true);
+      };
+      const onUp = (event: Event) => {
+        event.preventDefault();
+        setDir(dir, false);
+      };
+
+      btn.addEventListener("pointerdown", onDown);
+      btn.addEventListener("pointerup", onUp);
+      btn.addEventListener("pointercancel", onUp);
+      btn.addEventListener("pointerleave", onUp);
+      btn.addEventListener("touchend", onUp);
+    });
+
+    window.addEventListener("blur", () => {
+      this.dpadState = { up: false, down: false, left: false, right: false };
+    });
   }
 }
 

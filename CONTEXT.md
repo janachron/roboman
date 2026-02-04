@@ -18,6 +18,8 @@ Scope:
 Current State:
 - Basic player movement (arrow keys + WASD) and a simple 2-frame walk animation.
 - GitHub Pages deploy configured via Actions.
+- Live demo deployed at `https://janachron.github.io/roboman/`.
+- Mobile-only on-screen D-pad for movement controls.
 
 Constraints:
 - Must be free to develop and host
@@ -26,5 +28,5 @@ Constraints:
 
 
 Important:
-- AI Agent must always remember to update PROGRESS.md before committing (remind me)
-- AI Agent must always remember to updated CONTEXT.md if anything new has been learned (remind me)
+- AI Agent must always remember to update PROGRESS.md before committing ( can you update these as needed without reminding me)
+- AI Agent must always remember to updated CONTEXT.md if anything new has been learned ( can you update these as needed without reminding me)
