@@ -26,6 +26,7 @@ Current State:
 - Game canvas uses a portrait resolution with fit scaling for mobile screens.
 - Control bar is overlayed on the bottom of the game canvas to avoid scrolling.
 - Game canvas includes bottom buffer for mobile browser UI.
+- Bottom buffer is adaptive (viewport + safe-area); control bar gradient removed.
 
 Constraints:
 - Must be free to develop and host

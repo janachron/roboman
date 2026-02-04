@@ -17,3 +17,4 @@ Progress Log
 - Switched game canvas to a portrait resolution with fit scaling for mobile.
 - Overlayed the mobile control bar on top of the game canvas to avoid scrolling.
 - Added a bottom buffer to keep the game canvas above mobile browser UI.
+- Made the bottom buffer adaptive to viewport and safe-area, and removed the control-bar gradient.
