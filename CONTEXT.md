@@ -34,6 +34,8 @@ Current State:
 - Background music unlocks on any user input (keyboard or pointer).
 - Audio unlock flow improved to start on the first gesture.
 - Player movement speed doubled.
+- Start screen with centered button gates gameplay and music.
+- Player movement speed doubled again.
 
 Constraints:
 - Must be free to develop and host

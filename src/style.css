@@ -29,6 +29,29 @@ body {
   display: block;
 }
 
+.start-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: grid;
+  place-items: center;
+  z-index: 20;
+}
+
+.start-button {
+  font-size: 20px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 2px solid #1f2a3a;
+  background: #101723;
+  color: #e6f3ff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.start-button:active {
+  transform: translateY(1px);
+}
+
 .control-bar {
   position: fixed;
   left: 0;

@@ -18,8 +18,9 @@ class MainScene extends Phaser.Scene {
   private activeDpadPointerId: number | null = null;
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private music?: Phaser.Sound.BaseSound;
-  private readonly speed = 440;
-  private musicUnlockBound = false;
+  private readonly speed = 880;
+  private gameStarted = false;
+  private startOverlay?: HTMLElement;
 
   preload() {
     this.load.audio("theme", ["assets/audio/theme.mp3"]);
@@ -39,6 +40,8 @@ class MainScene extends Phaser.Scene {
   }
 
   create() {
+    this.cameras.main.setBackgroundColor("#000");
+
     this.add.text(24, 24, "Roboman", {
       fontFamily: "sans-serif",
       fontSize: "32px",
@@ -48,6 +51,9 @@ class MainScene extends Phaser.Scene {
     this.player = this.physics.add
       .sprite(120, 120, "player_idle")
       .setCollideWorldBounds(true);
+    this.player.setVisible(false);
+    this.player.setActive(false);
+    this.player.body.enable = false;
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys({
@@ -65,12 +71,13 @@ class MainScene extends Phaser.Scene {
     });
 
     this.registerDpadControls();
-
     this.music = this.sound.add("theme", { loop: true, volume: 0.5 });
-    this.tryStartMusic();
+    this.setupStartOverlay();
   }
 
   update() {
+    if (!this.gameStarted) return;
+
     let vx = 0;
     let vy = 0;
 
@@ -98,6 +105,49 @@ class MainScene extends Phaser.Scene {
     } else {
       this.player.anims.stop();
       this.player.setTexture("player_idle");
+    }
+  }
+
+  private setupStartOverlay() {
+    this.startOverlay = document.querySelector<HTMLElement>(".start-overlay") || undefined;
+    const startButton =
+      this.startOverlay?.querySelector<HTMLButtonElement>(".start-button") ||
+      undefined;
+
+    if (!startButton) {
+      this.startGame();
+      return;
+    }
+
+    startButton.addEventListener("click", () => this.startGame(), { once: true });
+    startButton.addEventListener("touchstart", () => this.startGame(), { once: true });
+  }
+
+  private startGame() {
+    if (this.gameStarted) return;
+    this.gameStarted = true;
+
+    if (this.startOverlay) {
+      this.startOverlay.style.display = "none";
+    }
+
+    this.cameras.main.setBackgroundColor("#1b1f2a");
+    this.player.setActive(true);
+    this.player.setVisible(true);
+    this.player.body.enable = true;
+
+    if (this.music && !this.music.isPlaying) {
+      this.sound.unlock();
+
+      if (this.sound.locked) {
+        this.sound.once(Phaser.Sound.Events.UNLOCKED, () => {
+          if (!this.music || this.music.isPlaying) return;
+          this.music.play();
+        });
+        return;
+      }
+
+      this.music.play();
     }
   }
 
@@ -167,50 +217,6 @@ class MainScene extends Phaser.Scene {
     window.addEventListener("blur", resetDpad);
   }
 
-  private tryStartMusic() {
-    if (!this.music || this.music.isPlaying) return;
-    this.sound.unlock();
-
-    if (this.sound.locked) {
-      const unlock = () => {
-        this.sound.unlock();
-
-        if (this.music && !this.music.isPlaying) {
-          this.sound.once(Phaser.Sound.Events.UNLOCKED, () => {
-            if (!this.music || this.music.isPlaying) return;
-            this.music.play();
-          });
-        }
-
-        if (!this.sound.locked && this.music && !this.music.isPlaying) {
-          this.music.play();
-        }
-      };
-      if (!this.musicUnlockBound) {
-        this.input.keyboard.once("keydown", unlock);
-        window.addEventListener("keydown", unlock, { once: true });
-
-        const canvas = this.game.canvas;
-        if (canvas) {
-          canvas.addEventListener("touchstart", unlock, { once: true });
-          canvas.addEventListener("pointerdown", unlock, { once: true });
-        }
-
-        const controlBar = document.querySelector(".control-bar");
-        if (controlBar) {
-          controlBar.addEventListener("touchstart", unlock, { once: true });
-          controlBar.addEventListener("pointerdown", unlock, { once: true });
-        }
-
-        document.addEventListener("touchstart", unlock, { once: true });
-        document.addEventListener("pointerdown", unlock, { once: true });
-        this.musicUnlockBound = true;
-      }
-      return;
-    }
-
-    this.music.play();
-  }
 }
 
 const GAME_WIDTH = 540;
