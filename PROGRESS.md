@@ -23,3 +23,4 @@ Progress Log
 - Added overscroll lock to reduce mobile zoom/pan issues.
 - Disabled text selection on controls and tightened touch-action locking on mobile.
 - Prevented touchmove on the game container to further stabilize mobile.
+- Wired in the 4x4 Roboman sprite sheet (20x20 frames) with directional animations.

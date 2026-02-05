@@ -30,22 +30,20 @@ class MainScene extends Phaser.Scene {
   private startOverlay?: HTMLElement;
   private fireReady = true;
   private fireButton?: HTMLButtonElement;
+  private lastDir: "down" | "left" | "right" | "up" = "down";
 
   preload() {
     this.load.audio("theme", ["assets/audio/theme.mp3"]);
+    this.load.spritesheet(
+      "roboman",
+      "assets/sprites/roboman walking sprite sheet.png",
+      {
+        frameWidth: 20,
+        frameHeight: 20
+      }
+    );
 
     const gfx = this.add.graphics();
-    gfx.fillStyle(0x4dd0e1, 1);
-    gfx.fillRect(0, 0, 32, 32);
-    gfx.generateTexture("player_idle", 32, 32);
-    gfx.clear();
-    gfx.fillStyle(0x26a69a, 1);
-    gfx.fillRect(0, 0, 32, 32);
-    gfx.fillStyle(0xffffff, 1);
-    gfx.fillRect(6, 6, 6, 6);
-    gfx.fillRect(20, 6, 6, 6);
-    gfx.generateTexture("player_step", 32, 32);
-
     gfx.clear();
     gfx.fillStyle(0xef5350, 1);
     gfx.fillRect(0, 0, 36, 36);
@@ -93,7 +91,7 @@ class MainScene extends Phaser.Scene {
     }).setOrigin(1, 0);
 
     this.player = this.physics.add
-      .sprite(120, 120, "player_idle")
+      .sprite(120, 120, "roboman")
       .setCollideWorldBounds(true);
     this.player.setDepth(2);
     this.player.setVisible(false);
@@ -121,10 +119,35 @@ class MainScene extends Phaser.Scene {
       right: Phaser.Input.Keyboard.KeyCodes.D
     }) as MainScene["keys"];
 
+    const framesPerRow = 4;
+    const rowFrames = (row: number) =>
+      this.anims.generateFrameNumbers("roboman", {
+        start: row * framesPerRow,
+        end: row * framesPerRow + framesPerRow - 1
+      });
+
     this.anims.create({
-      key: "walk",
-      frames: [{ key: "player_idle" }, { key: "player_step" }],
-      frameRate: 6,
+      key: "walk_down",
+      frames: rowFrames(0),
+      frameRate: 8,
+      repeat: -1
+    });
+    this.anims.create({
+      key: "walk_left",
+      frames: rowFrames(1),
+      frameRate: 8,
+      repeat: -1
+    });
+    this.anims.create({
+      key: "walk_right",
+      frames: rowFrames(2),
+      frameRate: 8,
+      repeat: -1
+    });
+    this.anims.create({
+      key: "walk_up",
+      frames: rowFrames(3),
+      frameRate: 8,
       repeat: -1
     });
 
@@ -220,10 +243,19 @@ class MainScene extends Phaser.Scene {
     this.player.setVelocity(vx, vy);
 
     if (vx !== 0 || vy !== 0) {
-      if (!this.player.anims.isPlaying) this.player.anims.play("walk");
+      const dir =
+        Math.abs(vx) >= Math.abs(vy)
+          ? vx < 0
+            ? "left"
+            : "right"
+          : vy < 0
+            ? "up"
+            : "down";
+      this.lastDir = dir;
+      this.player.anims.play(`walk_${dir}`, true);
     } else {
       this.player.anims.stop();
-      this.player.setTexture("player_idle");
+      this.player.setFrame(this.getIdleFrame(this.lastDir));
     }
 
     const toPlayer = new Phaser.Math.Vector2(
@@ -265,6 +297,21 @@ class MainScene extends Phaser.Scene {
 
     startButton.addEventListener("click", () => this.startGame(), { once: true });
     startButton.addEventListener("touchstart", () => this.startGame(), { once: true });
+  }
+
+  private getIdleFrame(dir: "down" | "left" | "right" | "up") {
+    switch (dir) {
+      case "down":
+        return 0;
+      case "left":
+        return 4;
+      case "right":
+        return 8;
+      case "up":
+        return 12;
+      default:
+        return 0;
+    }
   }
 
   private startGame() {
