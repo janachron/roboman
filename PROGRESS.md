@@ -22,3 +22,4 @@ Progress Log
 - Simplified desktop firing to mouse down with touch-guard.
 - Added overscroll lock to reduce mobile zoom/pan issues.
 - Disabled text selection on controls and tightened touch-action locking on mobile.
+- Prevented touchmove on the game container to further stabilize mobile.

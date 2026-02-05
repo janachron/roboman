@@ -63,6 +63,17 @@ class MainScene extends Phaser.Scene {
   create() {
     this.cameras.main.setBackgroundColor("#000");
 
+    const gameRoot = document.getElementById("game");
+    if (gameRoot) {
+      gameRoot.addEventListener(
+        "touchmove",
+        (event) => {
+          event.preventDefault();
+        },
+        { passive: false }
+      );
+    }
+
     this.add.text(24, 24, "Roboman", {
       fontFamily: "sans-serif",
       fontSize: "32px",

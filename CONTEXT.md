@@ -37,6 +37,7 @@ Current State:
 - Desktop firing uses mouse down only (touch-guarded).
 - Mobile overscroll lock enabled to prevent zoom/pan.
 - Touch-action locked on game canvas; controls remain tappable with selection disabled.
+- Touchmove is prevented on the game container for extra mobile stability.
 
 Constraints:
 - Must be free to develop and host
