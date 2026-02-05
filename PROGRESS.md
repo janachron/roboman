@@ -20,3 +20,4 @@ Progress Log
 - Added a desktop mousedown fallback for firing.
 - Added document pointerdown fallback for desktop firing and enforced enemy visibility.
 - Simplified desktop firing to mouse down with touch-guard.
+- Added overscroll lock to reduce mobile zoom/pan issues.

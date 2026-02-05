@@ -35,6 +35,7 @@ Current State:
 - Desktop firing uses a mouse down fallback.
 - Desktop firing also listens to document pointerdown; enemy visibility reinforced.
 - Desktop firing uses mouse down only (touch-guarded).
+- Mobile overscroll lock enabled to prevent zoom/pan.
 
 Constraints:
 - Must be free to develop and host
