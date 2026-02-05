@@ -36,6 +36,7 @@ Current State:
 - Desktop firing also listens to document pointerdown; enemy visibility reinforced.
 - Desktop firing uses mouse down only (touch-guarded).
 - Mobile overscroll lock enabled to prevent zoom/pan.
+- Touch-action locked on game canvas; controls remain tappable with selection disabled.
 
 Constraints:
 - Must be free to develop and host
