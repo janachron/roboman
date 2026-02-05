@@ -38,7 +38,7 @@ Current State:
 - Mobile overscroll lock enabled to prevent zoom/pan.
 - Touch-action locked on game canvas; controls remain tappable with selection disabled.
 - Touchmove is prevented on the game container for extra mobile stability.
-- Player uses a 4x4 sprite sheet (20x20 frames) with directional animations.
+- Player uses a 4x4 sprite sheet (41x50 frames) with directional animations.
 - Sprite sheet filename now uses underscores (no spaces) for reliable loading.
 
 Constraints:

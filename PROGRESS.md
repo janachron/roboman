@@ -25,3 +25,4 @@ Progress Log
 - Prevented touchmove on the game container to further stabilize mobile.
 - Wired in the 4x4 Roboman sprite sheet (20x20 frames) with directional animations.
 - Renamed sprite sheet file to remove spaces for reliable loading.
+- Updated sprite sheet frame size to 41x50 based on the new 165x200 sheet.
