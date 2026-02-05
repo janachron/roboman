@@ -34,14 +34,10 @@ class MainScene extends Phaser.Scene {
 
   preload() {
     this.load.audio("theme", ["assets/audio/theme.mp3"]);
-    this.load.spritesheet(
-      "roboman",
-      "assets/sprites/roboman walking sprite sheet.png",
-      {
-        frameWidth: 20,
-        frameHeight: 20
-      }
-    );
+    this.load.spritesheet("roboman", "assets/sprites/roboman_walk.png", {
+      frameWidth: 20,
+      frameHeight: 20
+    });
 
     const gfx = this.add.graphics();
     gfx.clear();
