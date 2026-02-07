@@ -20,7 +20,7 @@ Current State:
 - Mobile-first layout with portrait canvas and overlay controls (D-pad + Fire button).
 - Start screen gates gameplay and music.
 - Player movement via keyboard + D-pad with directional sprite sheet (4x4, 41x50).
-- Enemy uses `badguy1.png` (4x4, 40x51) with directional animations and enters from above on start. Corpse now lingers on death.
+- Enemy uses `badguy1.png` (4x4, 40x51) with directional animations and enters from above on start (hidden off-screen before tween). Corpse now lingers on death.
 - Bullets fire from mouse (desktop) and Fire button (mobile); enemy has 20 HP; HP label shown.
 - Audio assets in `public/assets/audio/`, theme plays on Start (`thelast-tothefuture.mp3`), gunshot/explosion SFX wired.
 - Code split into `src/scenes/MainScene.ts` plus `src/entities/Player.ts` and `src/entities/Enemy.ts`.

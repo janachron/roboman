@@ -228,12 +228,12 @@ export class MainScene extends Phaser.Scene {
     this.enemy.resetState();
     this.enemyHp = 20;
     this.enemyEntering = true;
+    const offscreenY = -Math.max(this.enemy.sprite.height, 80);
     this.enemy.sprite.setVisible(false);
-    this.enemy.sprite.setPosition(GAME_WIDTH / 2, -200);
-    this.enemy.sprite.setAlpha(1);
+    this.enemy.sprite.setAlpha(0);
+    this.enemy.sprite.setPosition(GAME_WIDTH / 2, offscreenY);
     this.enemy.sprite.setScale(1);
     this.enemy.lastDir = "down";
-    this.enemy.sprite.setVisible(true);
     this.enemy.sprite.anims.play("enemy_walk_down", true);
     this.tweens.add({
       targets: this.enemy.sprite,
@@ -241,6 +241,10 @@ export class MainScene extends Phaser.Scene {
       duration: 1600,
       delay: 500,
       ease: "Sine.easeOut",
+      onStart: () => {
+        this.enemy.sprite.setVisible(true);
+        this.enemy.sprite.setAlpha(1);
+      },
       onComplete: () => {
         this.enemyEntering = false;
         this.enemy.sprite.body.enable = true;
