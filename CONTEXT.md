@@ -48,6 +48,7 @@ Current State:
 - Start button triggers a 5-second countdown; enemy enters from above afterward.
 - Player death triggers electric effect + rotation; explosion/gameover SFX hooks added.
 - Player starts at bottom; enemy starts farther above screen; enemy VFX scaled up.
+- Enemy death includes rotation, darkened tint, and electric effect.
 - Sprite sheet filename now uses underscores (no spaces) for reliable loading.
 
 Constraints:
