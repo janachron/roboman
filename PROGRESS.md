@@ -42,3 +42,4 @@ Progress Log
 - Enemy death now includes electric effect, 90° rotation, and darkened tint.
 - Enemy remains visible after death until Good Job is clicked.
 - Start button now also listens to pointerdown; enemy death electric effect stops after a moment.
+- Start button now listens to touchend/pointerup; enemy visibility forced after death.
