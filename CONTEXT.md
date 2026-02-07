@@ -49,6 +49,7 @@ Current State:
 - Player death triggers electric effect + rotation; explosion/gameover SFX hooks added.
 - Player starts at bottom; enemy starts farther above screen; enemy VFX scaled up.
 - Enemy death includes rotation, darkened tint, and electric effect.
+- Enemy stays visible after death until Good Job is clicked.
 - Sprite sheet filename now uses underscores (no spaces) for reliable loading.
 
 Constraints:
