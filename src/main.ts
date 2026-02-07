@@ -226,9 +226,12 @@ class MainScene extends Phaser.Scene {
         this.playSfx(this.explosionSoundKey, 0.7);
 
         enemy.setVelocity(0, 0);
-        enemy.setVisible(false);
-        enemy.setActive(false);
+        enemy.setActive(true);
+        enemy.setVisible(true);
         enemy.body.enable = false;
+        enemy.setRotation(-Math.PI / 2);
+        enemy.setTint(0x222222);
+        enemy.anims.stop();
       }
     );
 
