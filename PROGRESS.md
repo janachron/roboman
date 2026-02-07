@@ -31,3 +31,9 @@ Progress Log
 - Enemy now takes 20 hits, explodes, and no longer respawns.
 - Added hit sparks, bullet impact SFX, and shot SFX (if audio files are provided).
 - Player death triggers a Game Over message on enemy contact.
+- Enemy HP increased to 200 with smoke at 100 and fire at 50.
+- Enemy now stays dead after exploding; "Good Job" appears after 5s and restarts.
+- Enemy size increased and player speed reduced by 20%.
+- Bullets now aim forward if no enemy, and gently home toward enemies when present.
+- Enemy enters from above after a start countdown; Game Over halts gameplay.
+- Added explosion and game-over SFX hooks plus electric death effect for player.
