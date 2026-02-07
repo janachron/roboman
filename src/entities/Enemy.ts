@@ -5,6 +5,7 @@ export class Enemy {
   public readonly sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   public lastDir: Direction = "down";
   public entering = false;
+  public dead = false;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     this.sprite = scene.physics.add
@@ -56,7 +57,28 @@ export class Enemy {
     this.sprite.body.enable = active;
   }
 
+  markDead() {
+    this.dead = true;
+    this.sprite.setVelocity(0, 0);
+    this.sprite.setActive(true);
+    this.sprite.setVisible(true);
+    this.sprite.body.enable = false;
+    this.sprite.setRotation(-Math.PI / 2);
+    this.sprite.setTint(0x222222);
+    this.sprite.anims.stop();
+    this.sprite.setFrame(this.getIdleFrame(this.lastDir));
+  }
+
+  resetState() {
+    this.dead = false;
+    this.entering = false;
+    this.sprite.setRotation(0);
+    this.sprite.clearTint();
+    this.setActiveVisible(true);
+  }
+
   updateChase(scene: Phaser.Scene, targetX: number, targetY: number, speed: number) {
+    if (this.dead || this.entering) return;
     const toTarget = new Phaser.Math.Vector2(
       targetX - this.sprite.x,
       targetY - this.sprite.y

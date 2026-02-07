@@ -146,10 +146,7 @@ export class MainScene extends Phaser.Scene {
         this.cameras.main.flash(200, 255, 120, 80);
         this.playSfx(this.explosionSoundKey, 0.7);
 
-        enemy.setVelocity(0, 0);
-        enemy.setVisible(false);
-        enemy.setActive(false);
-        enemy.body.enable = false;
+        this.enemy.markDead();
       }
     );
 
@@ -192,7 +189,7 @@ export class MainScene extends Phaser.Scene {
       this.enemy.updateChase(this, this.player.sprite.x, this.player.sprite.y, this.enemySpeed);
     }
 
-    if (this.enemyHp > 0 && (!this.enemy.sprite.visible || !this.enemy.sprite.active)) {
+    if (this.enemyHp > 0 && !this.enemy.dead && (!this.enemy.sprite.visible || !this.enemy.sprite.active)) {
       this.enemy.sprite.setVisible(true);
       this.enemy.sprite.setActive(true);
       this.enemy.sprite.body.enable = true;
@@ -228,7 +225,7 @@ export class MainScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor("#1b1f2a");
     this.player.setActiveVisible(true);
 
-    this.enemy.setActiveVisible(true);
+    this.enemy.resetState();
     this.enemyHp = 20;
     this.enemyEntering = true;
     this.enemy.sprite.setPosition(GAME_WIDTH / 2, -200);
