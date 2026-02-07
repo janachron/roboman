@@ -26,22 +26,15 @@ class MainScene extends Phaser.Scene {
   private readonly bulletSpeed = 720;
   private lastEnemyHitAt = 0;
   private enemyHp = 20;
-  private enemyAlive = true;
   private enemyHpText!: Phaser.GameObjects.Text;
   private gameStarted = false;
-  private gameOver = false;
   private startOverlay?: HTMLElement;
   private fireReady = true;
   private fireButton?: HTMLButtonElement;
   private lastDir: "down" | "left" | "right" | "up" = "down";
-  private readonly shotSoundKey = "sfx_shot";
-  private readonly hitSoundKey = "sfx_hit";
 
   preload() {
     this.load.audio("theme", ["assets/audio/theme.mp3"]);
-    // Optional SFX (add files to public/assets/audio/).
-    this.load.audio(this.shotSoundKey, ["assets/audio/shot.mp3"]);
-    this.load.audio(this.hitSoundKey, ["assets/audio/hit.mp3"]);
     this.load.spritesheet("roboman", "assets/sprites/roboman-walk.png", {
       frameWidth: 41,
       frameHeight: 50
@@ -63,11 +56,6 @@ class MainScene extends Phaser.Scene {
     gfx.fillStyle(0xfff59d, 1);
     gfx.fillRect(0, 0, 10, 4);
     gfx.generateTexture("bullet", 10, 4);
-
-    gfx.clear();
-    gfx.fillStyle(0xffc400, 1);
-    gfx.fillCircle(3, 3, 3);
-    gfx.generateTexture("spark", 6, 6);
     gfx.destroy();
   }
 
@@ -200,41 +188,24 @@ class MainScene extends Phaser.Scene {
     this.setupStartOverlay();
 
     this.physics.add.overlap(this.player, this.enemy, () => {
-      if (!this.gameStarted || this.gameOver || !this.enemyAlive) return;
       const now = this.time.now;
       if (now - this.lastEnemyHitAt < 750) return;
       this.lastEnemyHitAt = now;
 
-      this.gameOver = true;
-      this.player.setVelocity(0, 0);
-      this.enemy.setVelocity(0, 0);
-
       this.cameras.main.flash(120, 255, 60, 60);
-      const gameOverText = this.add.text(
-        GAME_WIDTH / 2,
-        GAME_HEIGHT / 2,
-        "Game Over",
-        {
-          fontFamily: "sans-serif",
-          fontSize: "36px",
-          color: "#ffb0b0"
-        }
-      );
-      gameOverText.setOrigin(0.5, 0.5);
+      this.player.setPosition(120, 120);
+      this.enemy.setPosition(420, 240);
+      this.enemy.setVelocity(0, 0);
     });
 
     this.physics.add.overlap(
       this.bullets,
       this.enemy,
       (bulletObj, enemyObj) => {
-        if (!this.enemyAlive) return;
         const bullet = bulletObj as Phaser.Physics.Arcade.Image;
         const enemy = enemyObj as Phaser.Physics.Arcade.Sprite;
         if (!bullet.active) return;
         bullet.disableBody(true, true);
-
-        this.playSfx(this.hitSoundKey, 0.6);
-        this.spawnHitSparks(enemy.x, enemy.y);
 
         this.enemyHp = Math.max(0, this.enemyHp - 1);
         this.enemyHpText.setText(`HP: ${this.enemyHp}`);
@@ -245,23 +216,27 @@ class MainScene extends Phaser.Scene {
           return;
         }
 
-        this.enemyAlive = false;
-        this.cameras.main.shake(240, 0.015);
-        this.cameras.main.flash(220, 255, 120, 80);
+        this.enemyHp = 20;
+        this.enemyHpText.setText(`HP: ${this.enemyHp}`);
+        this.cameras.main.shake(180, 0.01);
+        this.cameras.main.flash(200, 255, 120, 80);
 
         enemy.setVelocity(0, 0);
         enemy.setScale(1.3);
         this.tweens.add({
           targets: enemy,
-          scale: 0,
-          duration: 260,
-          ease: "Back.In",
-          onComplete: () => {
-            enemy.setVisible(false);
-            enemy.setActive(false);
-            enemy.body.enable = false;
-          }
+          scale: 1,
+          duration: 220,
+          ease: "Back.Out"
         });
+
+        enemy.setPosition(
+          Phaser.Math.Between(60, 480),
+          Phaser.Math.Between(80, 880)
+        );
+        enemy.setVisible(true);
+        enemy.setActive(true);
+        enemy.body.enable = true;
       }
     );
 
@@ -275,7 +250,7 @@ class MainScene extends Phaser.Scene {
   }
 
   update() {
-    if (!this.gameStarted || this.gameOver) return;
+    if (!this.gameStarted) return;
 
     let vx = 0;
     let vy = 0;
@@ -327,9 +302,7 @@ class MainScene extends Phaser.Scene {
 
     if (toPlayer.lengthSq() > 0.001) {
       toPlayer.normalize().scale(this.enemySpeed);
-      if (this.enemyAlive) {
-        this.enemy.setVelocity(toPlayer.x, toPlayer.y);
-      }
+      this.enemy.setVelocity(toPlayer.x, toPlayer.y);
 
       const dir =
         Math.abs(toPlayer.x) >= Math.abs(toPlayer.y)
@@ -342,14 +315,14 @@ class MainScene extends Phaser.Scene {
       this.enemyLastDir = dir;
       const enemyAnimKey = `enemy_walk_${dir}`;
       const enemyAnim = this.anims.get(enemyAnimKey);
-      if (this.enemyAlive && enemyAnim && enemyAnim.frames.length > 0) {
+      if (enemyAnim && enemyAnim.frames.length > 0) {
         this.enemy.anims.play(enemyAnimKey, true);
       }
     } else {
       this.enemy.setVelocity(0, 0);
     }
 
-    if (this.enemyAlive && this.enemyHp > 0 && (!this.enemy.visible || !this.enemy.active)) {
+    if (this.enemyHp > 0 && (!this.enemy.visible || !this.enemy.active)) {
       this.enemy.setVisible(true);
       this.enemy.setActive(true);
       this.enemy.body.enable = true;
@@ -422,9 +395,6 @@ class MainScene extends Phaser.Scene {
     this.enemy.setVisible(true);
     this.enemy.body.enable = true;
     this.enemyHp = 20;
-    this.enemyAlive = true;
-    this.gameOver = false;
-    this.enemyHpText.setText(`HP: ${this.enemyHp}`);
 
     this.fireButton =
       document.querySelector<HTMLButtonElement>(".action-btn") || undefined;
@@ -486,7 +456,7 @@ class MainScene extends Phaser.Scene {
   }
 
   private fireBullet() {
-    if (!this.gameStarted || this.gameOver) return;
+    if (!this.gameStarted) return;
     if (!this.fireReady) return;
     this.fireReady = false;
     this.time.delayedCall(150, () => {
@@ -518,28 +488,9 @@ class MainScene extends Phaser.Scene {
     bullet.setVelocity(toEnemy.x, toEnemy.y);
     bullet.setRotation(Math.atan2(toEnemy.y, toEnemy.x));
 
-    this.playSfx(this.shotSoundKey, 0.4);
-
     this.time.delayedCall(900, () => {
       if (bullet.active) bullet.disableBody(true, true);
     });
-  }
-
-  private playSfx(key: string, volume: number) {
-    if (!this.cache.audio.exists(key)) return;
-    this.sound.play(key, { volume });
-  }
-
-  private spawnHitSparks(x: number, y: number) {
-    const particles = this.add.particles(x, y, "spark", {
-      speed: { min: 60, max: 160 },
-      angle: { min: 0, max: 360 },
-      lifespan: 300,
-      quantity: 12,
-      scale: { start: 1, end: 0 },
-      alpha: { start: 1, end: 0 }
-    });
-    this.time.delayedCall(320, () => particles.destroy());
   }
 
   private registerDpadControls() {
