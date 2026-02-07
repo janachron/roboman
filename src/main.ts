@@ -18,6 +18,7 @@ class MainScene extends Phaser.Scene {
   private activeDpadPointerId: number | null = null;
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private enemy!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  private enemyLastDir: "down" | "left" | "right" | "up" = "down";
   private bullets!: Phaser.Physics.Arcade.Group;
   private music?: Phaser.Sound.BaseSound;
   private readonly speed = 880;
@@ -37,6 +38,10 @@ class MainScene extends Phaser.Scene {
     this.load.spritesheet("roboman", "assets/sprites/roboman-walk.png", {
       frameWidth: 41,
       frameHeight: 50
+    });
+    this.load.spritesheet("badguy1", "assets/sprites/badguy1.png", {
+      frameWidth: 40,
+      frameHeight: 52
     });
 
     const gfx = this.add.graphics();
@@ -95,7 +100,7 @@ class MainScene extends Phaser.Scene {
     this.player.body.enable = false;
 
     this.enemy = this.physics.add
-      .sprite(420, 240, "enemy")
+      .sprite(420, 240, "badguy1")
       .setCollideWorldBounds(true);
     this.enemy.setDepth(1);
     this.enemy.setVisible(false);
@@ -116,7 +121,7 @@ class MainScene extends Phaser.Scene {
     }) as MainScene["keys"];
 
     const framesPerRow = 4;
-    const rowFrames = (row: number) =>
+    const rowFrames = (key: string, row: number) =>
       this.anims.generateFrameNumbers("roboman", {
         start: row * framesPerRow,
         end: row * framesPerRow + framesPerRow - 1
@@ -124,26 +129,57 @@ class MainScene extends Phaser.Scene {
 
     this.anims.create({
       key: "walk_down",
-      frames: rowFrames(0),
+      frames: rowFrames("roboman", 0),
       frameRate: 8,
       repeat: -1
     });
     this.anims.create({
       key: "walk_left",
-      frames: rowFrames(1),
+      frames: rowFrames("roboman", 1),
       frameRate: 8,
       repeat: -1
     });
     this.anims.create({
       key: "walk_right",
-      frames: rowFrames(2),
+      frames: rowFrames("roboman", 2),
       frameRate: 8,
       repeat: -1
     });
     this.anims.create({
       key: "walk_up",
-      frames: rowFrames(3),
+      frames: rowFrames("roboman", 3),
       frameRate: 8,
+      repeat: -1
+    });
+
+    const enemyRowFrames = (row: number) =>
+      this.anims.generateFrameNumbers("badguy1", {
+        start: row * framesPerRow,
+        end: row * framesPerRow + framesPerRow - 1
+      });
+
+    this.anims.create({
+      key: "enemy_walk_down",
+      frames: enemyRowFrames(0),
+      frameRate: 6,
+      repeat: -1
+    });
+    this.anims.create({
+      key: "enemy_walk_left",
+      frames: enemyRowFrames(1),
+      frameRate: 6,
+      repeat: -1
+    });
+    this.anims.create({
+      key: "enemy_walk_right",
+      frames: enemyRowFrames(2),
+      frameRate: 6,
+      repeat: -1
+    });
+    this.anims.create({
+      key: "enemy_walk_up",
+      frames: enemyRowFrames(3),
+      frameRate: 6,
       repeat: -1
     });
 
@@ -267,6 +303,17 @@ class MainScene extends Phaser.Scene {
     if (toPlayer.lengthSq() > 0.001) {
       toPlayer.normalize().scale(this.enemySpeed);
       this.enemy.setVelocity(toPlayer.x, toPlayer.y);
+
+      const dir =
+        Math.abs(toPlayer.x) >= Math.abs(toPlayer.y)
+          ? toPlayer.x < 0
+            ? "left"
+            : "right"
+          : toPlayer.y < 0
+            ? "up"
+            : "down";
+      this.enemyLastDir = dir;
+      this.enemy.anims.play(`enemy_walk_${dir}`, true);
     } else {
       this.enemy.setVelocity(0, 0);
     }
@@ -277,6 +324,8 @@ class MainScene extends Phaser.Scene {
       this.enemy.body.enable = true;
       this.enemy.setAlpha(1);
       this.enemy.setScale(1);
+      this.enemy.anims.stop();
+      this.enemy.setFrame(this.getEnemyIdleFrame(this.enemyLastDir));
     }
   }
 
@@ -296,6 +345,21 @@ class MainScene extends Phaser.Scene {
   }
 
   private getIdleFrame(dir: "down" | "left" | "right" | "up") {
+    switch (dir) {
+      case "down":
+        return 0;
+      case "left":
+        return 4;
+      case "right":
+        return 8;
+      case "up":
+        return 12;
+      default:
+        return 0;
+    }
+  }
+
+  private getEnemyIdleFrame(dir: "down" | "left" | "right" | "up") {
     switch (dir) {
       case "down":
         return 0;
