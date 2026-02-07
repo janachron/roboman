@@ -20,7 +20,7 @@ Current State:
 - Mobile-first layout with portrait canvas and overlay controls (D-pad + Fire button).
 - Start screen gates gameplay and music.
 - Player movement via keyboard + D-pad with directional sprite sheet (4x4, 41x50).
-- Enemy uses `badguy1.png` (4x4, 40x51) with directional animations and enters from further above with a brief delay.
+- Enemy uses `badguy1.png` (4x4, 40x51) with directional animations, enters from above, and explodes (does not respawn).
 - Bullets fire from mouse (desktop) and Fire button (mobile); enemy has 20 HP; HP label shown.
 - Audio assets in `public/assets/audio/`, theme plays on Start (`thelast-tothefuture.mp3`), gunshot/explosion SFX wired.
 

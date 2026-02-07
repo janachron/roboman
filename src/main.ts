@@ -221,28 +221,14 @@ class MainScene extends Phaser.Scene {
           return;
         }
 
-        this.enemyHp = 20;
-        this.enemyHpText.setText(`HP: ${this.enemyHp}`);
         this.cameras.main.shake(180, 0.01);
         this.cameras.main.flash(200, 255, 120, 80);
         this.playSfx(this.explosionSoundKey, 0.7);
 
         enemy.setVelocity(0, 0);
-        enemy.setScale(1.3);
-        this.tweens.add({
-          targets: enemy,
-          scale: 1,
-          duration: 220,
-          ease: "Back.Out"
-        });
-
-        enemy.setPosition(
-          Phaser.Math.Between(60, 480),
-          Phaser.Math.Between(80, 880)
-        );
-        enemy.setVisible(true);
-        enemy.setActive(true);
-        enemy.body.enable = true;
+        enemy.setVisible(false);
+        enemy.setActive(false);
+        enemy.body.enable = false;
       }
     );
 
