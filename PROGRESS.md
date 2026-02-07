@@ -41,3 +41,4 @@ Progress Log
 - Player starts at the bottom of the canvas; enemy begins higher off-screen.
 - Enemy death now includes electric effect, 90° rotation, and darkened tint.
 - Enemy remains visible after death until Good Job is clicked.
+- Start button now also listens to pointerdown; enemy death electric effect stops after a moment.

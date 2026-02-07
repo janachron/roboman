@@ -50,6 +50,7 @@ Current State:
 - Player starts at bottom; enemy starts farther above screen; enemy VFX scaled up.
 - Enemy death includes rotation, darkened tint, and electric effect.
 - Enemy stays visible after death until Good Job is clicked.
+- Start button handles pointerdown; enemy death electric effect stops after a short delay.
 - Sprite sheet filename now uses underscores (no spaces) for reliable loading.
 
 Constraints:
