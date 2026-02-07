@@ -21,37 +21,27 @@ class MainScene extends Phaser.Scene {
   private enemyLastDir: "down" | "left" | "right" | "up" = "down";
   private bullets!: Phaser.Physics.Arcade.Group;
   private music?: Phaser.Sound.BaseSound;
-  private readonly speed = 704;
+  private readonly speed = 880;
   private readonly enemySpeed = 180;
   private readonly bulletSpeed = 720;
   private lastEnemyHitAt = 0;
-  private enemyHp = 200;
+  private enemyHp = 20;
   private enemyAlive = true;
   private enemyHpText!: Phaser.GameObjects.Text;
   private gameStarted = false;
   private gameOver = false;
-  private enemyEntering = false;
   private startOverlay?: HTMLElement;
   private fireReady = true;
   private fireButton?: HTMLButtonElement;
   private lastDir: "down" | "left" | "right" | "up" = "down";
-  private countdownText?: Phaser.GameObjects.Text;
   private readonly shotSoundKey = "sfx_shot";
   private readonly hitSoundKey = "sfx_hit";
-  private readonly explosionSoundKey = "sfx_explosion";
-  private readonly gameOverSoundKey = "sfx_gameover";
-  private smokeEmitter?: Phaser.GameObjects.Particles.ParticleEmitter;
-  private fireEmitter?: Phaser.GameObjects.Particles.ParticleEmitter;
-  private goodJobText?: Phaser.GameObjects.Text;
-  private electroEmitter?: Phaser.GameObjects.Particles.ParticleEmitter;
 
   preload() {
     this.load.audio("theme", ["assets/audio/theme.mp3"]);
     // Optional SFX (add files to public/assets/audio/).
     this.load.audio(this.shotSoundKey, ["assets/audio/shot.mp3"]);
     this.load.audio(this.hitSoundKey, ["assets/audio/hit.mp3"]);
-    this.load.audio(this.explosionSoundKey, ["assets/audio/explosion.mp3"]);
-    this.load.audio(this.gameOverSoundKey, ["assets/audio/gameover.mp3"]);
     this.load.spritesheet("roboman", "assets/sprites/roboman-walk.png", {
       frameWidth: 41,
       frameHeight: 50
@@ -78,21 +68,6 @@ class MainScene extends Phaser.Scene {
     gfx.fillStyle(0xffc400, 1);
     gfx.fillCircle(3, 3, 3);
     gfx.generateTexture("spark", 6, 6);
-
-    gfx.clear();
-    gfx.fillStyle(0x9e9e9e, 1);
-    gfx.fillCircle(6, 6, 6);
-    gfx.generateTexture("smoke", 12, 12);
-
-    gfx.clear();
-    gfx.fillStyle(0xff7043, 1);
-    gfx.fillCircle(5, 5, 5);
-    gfx.generateTexture("fire", 10, 10);
-
-    gfx.clear();
-    gfx.fillStyle(0x64b5f6, 1);
-    gfx.fillRect(0, 0, 8, 2);
-    gfx.generateTexture("electric", 8, 2);
     gfx.destroy();
   }
 
@@ -122,7 +97,7 @@ class MainScene extends Phaser.Scene {
       color: "#a9b6c8"
     }).setOrigin(1, 0);
 
-    this.enemyHpText = this.add.text(GAME_WIDTH - 12, 36, "HP: 200", {
+    this.enemyHpText = this.add.text(GAME_WIDTH - 12, 36, "HP: 20", {
       fontFamily: "sans-serif",
       fontSize: "12px",
       color: "#ffb0b0"
@@ -137,10 +112,9 @@ class MainScene extends Phaser.Scene {
     this.player.body.enable = false;
 
     this.enemy = this.physics.add
-      .sprite(420, -80, "badguy1")
+      .sprite(420, 240, "badguy1")
       .setCollideWorldBounds(true);
     this.enemy.setDepth(1);
-    this.enemy.setScale(3);
     this.enemy.setVisible(false);
     this.enemy.setActive(false);
     this.enemy.body.enable = false;
@@ -221,44 +195,6 @@ class MainScene extends Phaser.Scene {
       repeat: -1
     });
 
-    const smokeParticles = this.add.particles(0, 0, "smoke", {
-      speedY: { min: -20, max: -50 },
-      speedX: { min: -10, max: 10 },
-      lifespan: 800,
-      scale: { start: 0.6, end: 1.2 },
-      alpha: { start: 0.5, end: 0 },
-      quantity: 2,
-      frequency: 120
-    });
-    smokeParticles.setDepth(3);
-    this.smokeEmitter = smokeParticles;
-    this.smokeEmitter.stop();
-
-    const fireParticles = this.add.particles(0, 0, "fire", {
-      speedY: { min: -30, max: -60 },
-      speedX: { min: -10, max: 10 },
-      lifespan: 500,
-      scale: { start: 0.7, end: 0.1 },
-      alpha: { start: 0.8, end: 0 },
-      quantity: 2,
-      frequency: 90
-    });
-    fireParticles.setDepth(3);
-    this.fireEmitter = fireParticles;
-    this.fireEmitter.stop();
-
-    const electroParticles = this.add.particles(0, 0, "electric", {
-      speed: { min: 30, max: 120 },
-      angle: { min: 0, max: 360 },
-      lifespan: 350,
-      quantity: 6,
-      scale: { start: 1, end: 0 },
-      alpha: { start: 0.9, end: 0 }
-    });
-    electroParticles.setDepth(4);
-    this.electroEmitter = electroParticles;
-    this.electroEmitter.stop();
-
     this.registerDpadControls();
     this.music = this.sound.add("theme", { loop: true, volume: 0.5 });
     this.setupStartOverlay();
@@ -272,12 +208,6 @@ class MainScene extends Phaser.Scene {
       this.gameOver = true;
       this.player.setVelocity(0, 0);
       this.enemy.setVelocity(0, 0);
-
-      this.player.setRotation(-Math.PI / 2);
-      this.player.setTint(0x9ad7ff);
-      this.electroEmitter?.setPosition(this.player.x, this.player.y);
-      this.electroEmitter?.start();
-      this.playSfx(this.gameOverSoundKey, 0.7);
 
       this.cameras.main.flash(120, 255, 60, 60);
       const gameOverText = this.add.text(
@@ -308,7 +238,6 @@ class MainScene extends Phaser.Scene {
 
         this.enemyHp = Math.max(0, this.enemyHp - 1);
         this.enemyHpText.setText(`HP: ${this.enemyHp}`);
-        this.updateEnemyEffects();
         if (this.enemyHp > 0) {
           enemy.setVisible(true);
           enemy.setActive(true);
@@ -319,7 +248,6 @@ class MainScene extends Phaser.Scene {
         this.enemyAlive = false;
         this.cameras.main.shake(240, 0.015);
         this.cameras.main.flash(220, 255, 120, 80);
-        this.playSfx(this.explosionSoundKey, 0.7);
 
         enemy.setVelocity(0, 0);
         enemy.setScale(1.3);
@@ -333,28 +261,6 @@ class MainScene extends Phaser.Scene {
             enemy.setActive(false);
             enemy.body.enable = false;
           }
-        });
-
-        this.smokeEmitter?.stop();
-        this.fireEmitter?.stop();
-
-        this.time.delayedCall(5000, () => {
-          if (this.goodJobText) return;
-          this.goodJobText = this.add.text(
-            GAME_WIDTH / 2,
-            GAME_HEIGHT / 2,
-            "Good Job",
-            {
-              fontFamily: "sans-serif",
-              fontSize: "32px",
-              color: "#e6f3ff",
-              backgroundColor: "#1b2333",
-              padding: { x: 20, y: 12 }
-            }
-          );
-          this.goodJobText.setOrigin(0.5, 0.5);
-          this.goodJobText.setInteractive({ useHandCursor: true });
-          this.goodJobText.on("pointerdown", () => this.resetGame());
         });
       }
     );
@@ -409,45 +315,38 @@ class MainScene extends Phaser.Scene {
       this.player.setFrame(this.getIdleFrame(this.lastDir));
     }
 
-    if (this.enemyAlive) {
-      if (this.enemyEntering) {
-        this.enemy.setVelocity(0, this.enemySpeed * 0.6);
-        if (this.enemy.y > 100) {
-          this.enemyEntering = false;
-        }
-      } else {
-        const toPlayer = new Phaser.Math.Vector2(
-          this.player.x - this.enemy.x,
-          this.player.y - this.enemy.y
-        );
-        const wander = new Phaser.Math.Vector2(
-          Math.cos(this.time.now / 900),
-          Math.sin(this.time.now / 700)
-        );
-        toPlayer.add(wander.scale(70));
+    const toPlayer = new Phaser.Math.Vector2(
+      this.player.x - this.enemy.x,
+      this.player.y - this.enemy.y
+    );
+    const wander = new Phaser.Math.Vector2(
+      Math.cos(this.time.now / 900),
+      Math.sin(this.time.now / 700)
+    );
+    toPlayer.add(wander.scale(70));
 
-        if (toPlayer.lengthSq() > 0.001) {
-          toPlayer.normalize().scale(this.enemySpeed);
-          this.enemy.setVelocity(toPlayer.x, toPlayer.y);
-
-          const dir =
-            Math.abs(toPlayer.x) >= Math.abs(toPlayer.y)
-              ? toPlayer.x < 0
-                ? "left"
-                : "right"
-              : toPlayer.y < 0
-                ? "up"
-                : "down";
-          this.enemyLastDir = dir;
-          const enemyAnimKey = `enemy_walk_${dir}`;
-          const enemyAnim = this.anims.get(enemyAnimKey);
-          if (enemyAnim && enemyAnim.frames.length > 0) {
-            this.enemy.anims.play(enemyAnimKey, true);
-          }
-        } else {
-          this.enemy.setVelocity(0, 0);
-        }
+    if (toPlayer.lengthSq() > 0.001) {
+      toPlayer.normalize().scale(this.enemySpeed);
+      if (this.enemyAlive) {
+        this.enemy.setVelocity(toPlayer.x, toPlayer.y);
       }
+
+      const dir =
+        Math.abs(toPlayer.x) >= Math.abs(toPlayer.y)
+          ? toPlayer.x < 0
+            ? "left"
+            : "right"
+          : toPlayer.y < 0
+            ? "up"
+            : "down";
+      this.enemyLastDir = dir;
+      const enemyAnimKey = `enemy_walk_${dir}`;
+      const enemyAnim = this.anims.get(enemyAnimKey);
+      if (this.enemyAlive && enemyAnim && enemyAnim.frames.length > 0) {
+        this.enemy.anims.play(enemyAnimKey, true);
+      }
+    } else {
+      this.enemy.setVelocity(0, 0);
     }
 
     if (this.enemyAlive && this.enemyHp > 0 && (!this.enemy.visible || !this.enemy.active)) {
@@ -455,12 +354,10 @@ class MainScene extends Phaser.Scene {
       this.enemy.setActive(true);
       this.enemy.body.enable = true;
       this.enemy.setAlpha(1);
-      this.enemy.setScale(3);
+      this.enemy.setScale(1);
       this.enemy.anims.stop();
       this.enemy.setFrame(this.getEnemyIdleFrame(this.enemyLastDir));
     }
-
-    this.updateBulletHoming();
   }
 
   private setupStartOverlay() {
@@ -510,7 +407,7 @@ class MainScene extends Phaser.Scene {
 
   private startGame() {
     if (this.gameStarted) return;
-    this.gameStarted = false;
+    this.gameStarted = true;
 
     if (this.startOverlay) {
       this.startOverlay.style.display = "none";
@@ -524,15 +421,10 @@ class MainScene extends Phaser.Scene {
     this.enemy.setActive(true);
     this.enemy.setVisible(true);
     this.enemy.body.enable = true;
-    this.enemyHp = 200;
+    this.enemyHp = 20;
     this.enemyAlive = true;
     this.gameOver = false;
     this.enemyHpText.setText(`HP: ${this.enemyHp}`);
-    this.updateEnemyEffects();
-
-    this.enemy.setPosition(Phaser.Math.Between(60, 480), -120);
-    this.enemyEntering = true;
-    this.enemy.setVelocity(0, 0);
 
     this.fireButton =
       document.querySelector<HTMLButtonElement>(".action-btn") || undefined;
@@ -591,27 +483,6 @@ class MainScene extends Phaser.Scene {
 
       this.music.play();
     }
-
-    this.startCountdown();
-  }
-
-  private resetGame() {
-    this.gameOver = false;
-    this.goodJobText?.destroy();
-    this.goodJobText = undefined;
-    this.enemyHp = 200;
-    this.enemyAlive = true;
-    this.enemyHpText.setText(`HP: ${this.enemyHp}`);
-    this.player.setPosition(120, 120);
-    this.player.setRotation(0);
-    this.player.clearTint();
-    this.electroEmitter?.stop();
-    this.enemy.setPosition(420, 240);
-    this.enemy.setScale(3);
-    this.enemy.setVisible(true);
-    this.enemy.setActive(true);
-    this.enemy.body.enable = true;
-    this.updateEnemyEffects();
   }
 
   private fireBullet() {
@@ -635,89 +506,23 @@ class MainScene extends Phaser.Scene {
     bullet.setCollideWorldBounds(true);
     bullet.body.onWorldBounds = true;
 
-    const aim = this.getAimVector();
-    aim.normalize().scale(this.bulletSpeed);
+    const toEnemy = new Phaser.Math.Vector2(
+      this.enemy.x - this.player.x,
+      this.enemy.y - this.player.y
+    );
+    if (toEnemy.lengthSq() === 0) {
+      toEnemy.set(1, 0);
+    }
+    toEnemy.normalize().scale(this.bulletSpeed);
 
-    bullet.setVelocity(aim.x, aim.y);
-    bullet.setRotation(Math.atan2(aim.y, aim.x));
-    bullet.setData("homing", true);
+    bullet.setVelocity(toEnemy.x, toEnemy.y);
+    bullet.setRotation(Math.atan2(toEnemy.y, toEnemy.x));
 
     this.playSfx(this.shotSoundKey, 0.4);
 
     this.time.delayedCall(900, () => {
       if (bullet.active) bullet.disableBody(true, true);
     });
-  }
-
-  private getAimVector() {
-    if (this.enemyAlive) {
-      const toEnemy = new Phaser.Math.Vector2(
-        this.enemy.x - this.player.x,
-        this.enemy.y - this.player.y
-      );
-      if (toEnemy.lengthSq() > 0.001) return toEnemy;
-    }
-
-    switch (this.lastDir) {
-      case "left":
-        return new Phaser.Math.Vector2(-1, 0);
-      case "right":
-        return new Phaser.Math.Vector2(1, 0);
-      case "up":
-        return new Phaser.Math.Vector2(0, -1);
-      case "down":
-      default:
-        return new Phaser.Math.Vector2(0, 1);
-    }
-  }
-
-  private updateBulletHoming() {
-    if (!this.enemyAlive) return;
-    this.bullets.children.each((child) => {
-      const bullet = child as Phaser.Physics.Arcade.Image;
-      if (!bullet.active || !bullet.getData("homing")) return;
-      const desired = new Phaser.Math.Vector2(
-        this.enemy.x - bullet.x,
-        this.enemy.y - bullet.y
-      );
-      if (desired.lengthSq() < 0.01) return;
-      desired.normalize().scale(this.bulletSpeed);
-      const current = new Phaser.Math.Vector2(bullet.body.velocity.x, bullet.body.velocity.y);
-      const steer = current.lerp(desired, 0.05);
-      bullet.setVelocity(steer.x, steer.y);
-      bullet.setRotation(Math.atan2(steer.y, steer.x));
-    });
-  }
-
-  private startCountdown() {
-    const total = 5;
-    let remaining = total;
-    this.countdownText?.destroy();
-    this.countdownText = this.add.text(
-      GAME_WIDTH / 2,
-      GAME_HEIGHT / 2,
-      `${remaining}`,
-      {
-        fontFamily: "sans-serif",
-        fontSize: "48px",
-        color: "#e6f3ff"
-      }
-    );
-    this.countdownText.setOrigin(0.5, 0.5);
-
-    const tick = () => {
-      remaining -= 1;
-      if (!this.countdownText) return;
-      if (remaining <= 0) {
-        this.countdownText.destroy();
-        this.countdownText = undefined;
-        this.gameStarted = true;
-        return;
-      }
-      this.countdownText.setText(`${remaining}`);
-      this.time.delayedCall(1000, tick);
-    };
-    this.time.delayedCall(1000, tick);
   }
 
   private playSfx(key: string, volume: number) {
@@ -735,29 +540,6 @@ class MainScene extends Phaser.Scene {
       alpha: { start: 1, end: 0 }
     });
     this.time.delayedCall(320, () => particles.destroy());
-  }
-
-  private updateEnemyEffects() {
-    if (!this.smokeEmitter || !this.fireEmitter) return;
-    if (!this.enemyAlive) {
-      this.smokeEmitter.stop();
-      this.fireEmitter.stop();
-      return;
-    }
-
-    this.smokeEmitter.setPosition(this.enemy.x, this.enemy.y - 40);
-    this.fireEmitter.setPosition(this.enemy.x, this.enemy.y - 30);
-
-    if (this.enemyHp <= 50) {
-      this.smokeEmitter.start();
-      this.fireEmitter.start();
-    } else if (this.enemyHp <= 100) {
-      this.smokeEmitter.start();
-      this.fireEmitter.stop();
-    } else {
-      this.smokeEmitter.stop();
-      this.fireEmitter.stop();
-    }
   }
 
   private registerDpadControls() {

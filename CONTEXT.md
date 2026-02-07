@@ -42,11 +42,6 @@ Current State:
 - Enemy uses `badguy1.png` (4x4, 40x51) with directional animations.
 - Enemy explodes at 0 HP and does not respawn; hit sparks and SFX added.
 - Player dies on contact and sees a Game Over message.
-- Enemy has 200 HP with smoke at 100 and fire at 50; larger size.
-- Player speed reduced by 20%; Good Job button appears 5s after enemy death to restart.
-- Bullets fire forward without a target and gently home toward enemies.
-- Start button triggers a 5-second countdown; enemy enters from above afterward.
-- Player death triggers electric effect + rotation; explosion/gameover SFX hooks added.
 - Sprite sheet filename now uses underscores (no spaces) for reliable loading.
 
 Constraints:
