@@ -28,3 +28,6 @@ Progress Log
 - Updated sprite sheet frame size to 41x50 based on the new 165x200 sheet.
 - Added `badguy1.png` sprite sheet (40x52) with directional enemy animations.
 - Adjusted badguy sprite frame height to 51 and guarded enemy animation playback.
+- Enemy now takes 20 hits, explodes, and no longer respawns.
+- Added hit sparks, bullet impact SFX, and shot SFX (if audio files are provided).
+- Player death triggers a Game Over message on enemy contact.
