@@ -16,31 +16,13 @@ Scope:
 - Optional: start menu, pause, and restart functionality
 
 Current State:
-- GitHub Pages deploy configured via Actions.
-- Live demo at `https://janachron.github.io/roboman/`.
-- Portrait mobile layout with overlay controls (D-pad + Fire button).
-- Start screen (black overlay + Start button) gates gameplay and music.
-- Player movement (keyboard + D-pad), faster speed, and simple walk animation.
-- Enemy seeks the player; bullets auto-aim to the enemy (tap Fire or mouse click), 20 HP per enemy.
+- GitHub Pages deploy configured via Actions; live demo at `https://janachron.github.io/roboman/`.
+- Mobile-first layout with portrait canvas and overlay controls (D-pad + Fire button).
+- Start screen gates gameplay and music.
+- Player movement via keyboard + D-pad with directional sprite sheet (4x4, 41x50).
+- Enemy uses `badguy1.png` (4x4, 40x51) with directional animations and enters from above on start.
+- Bullets fire from mouse (desktop) and Fire button (mobile); enemy has 20 HP; HP label shown.
 - Audio assets in `public/assets/audio/`, theme plays on Start.
-- On-screen version label for deployment verification.
-- Fire only triggers from the Fire button on mobile (mouse left click on desktop).
-- Canvas layout aligned to viewport on mobile.
-- Enemy HP and desktop left-click firing corrected.
-- On-screen enemy HP label added for debugging.
-- Desktop click firing restored; canvas centered on desktop.
-- Desktop click handling fixed after input error.
-- Start-button taps no longer trigger firing on mobile.
-- Enemy visibility reinforced during updates to prevent disappearing.
-- Desktop firing uses a mouse down fallback.
-- Desktop firing also listens to document pointerdown; enemy visibility reinforced.
-- Desktop firing uses mouse down only (touch-guarded).
-- Mobile overscroll lock enabled to prevent zoom/pan.
-- Touch-action locked on game canvas; controls remain tappable with selection disabled.
-- Touchmove is prevented on the game container for extra mobile stability.
-- Player uses a 4x4 sprite sheet (41x50 frames) with directional animations.
-- Enemy uses `badguy1.png` (4x4, 40x51) with directional animations.
-- Sprite sheet filename now uses underscores (no spaces) for reliable loading.
 
 Constraints:
 - Must be free to develop and host
@@ -49,5 +31,4 @@ Constraints:
 
 
 Important:
-- AI Agent must always remember to update PROGRESS.md before committing ( can you update these as needed without reminding me)
-- AI Agent must always remember to updated CONTEXT.md if anything new has been learned ( can you update these as needed without reminding me)
+- Update `CONTEXT.md` when anything new is learned or behavior changes.
