@@ -19,6 +19,7 @@ class MainScene extends Phaser.Scene {
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private enemy!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private enemyLastDir: "down" | "left" | "right" | "up" = "down";
+  private enemyEntering = false;
   private bullets!: Phaser.Physics.Arcade.Group;
   private music?: Phaser.Sound.BaseSound;
   private readonly speed = 880;
@@ -290,33 +291,37 @@ class MainScene extends Phaser.Scene {
       this.player.setFrame(this.getIdleFrame(this.lastDir));
     }
 
-    const toPlayer = new Phaser.Math.Vector2(
-      this.player.x - this.enemy.x,
-      this.player.y - this.enemy.y
-    );
-    const wander = new Phaser.Math.Vector2(
-      Math.cos(this.time.now / 900),
-      Math.sin(this.time.now / 700)
-    );
-    toPlayer.add(wander.scale(70));
+    if (!this.enemyEntering) {
+      const toPlayer = new Phaser.Math.Vector2(
+        this.player.x - this.enemy.x,
+        this.player.y - this.enemy.y
+      );
+      const wander = new Phaser.Math.Vector2(
+        Math.cos(this.time.now / 900),
+        Math.sin(this.time.now / 700)
+      );
+      toPlayer.add(wander.scale(70));
 
-    if (toPlayer.lengthSq() > 0.001) {
-      toPlayer.normalize().scale(this.enemySpeed);
-      this.enemy.setVelocity(toPlayer.x, toPlayer.y);
+      if (toPlayer.lengthSq() > 0.001) {
+        toPlayer.normalize().scale(this.enemySpeed);
+        this.enemy.setVelocity(toPlayer.x, toPlayer.y);
 
-      const dir =
-        Math.abs(toPlayer.x) >= Math.abs(toPlayer.y)
-          ? toPlayer.x < 0
-            ? "left"
-            : "right"
-          : toPlayer.y < 0
-            ? "up"
-            : "down";
-      this.enemyLastDir = dir;
-      const enemyAnimKey = `enemy_walk_${dir}`;
-      const enemyAnim = this.anims.get(enemyAnimKey);
-      if (enemyAnim && enemyAnim.frames.length > 0) {
-        this.enemy.anims.play(enemyAnimKey, true);
+        const dir =
+          Math.abs(toPlayer.x) >= Math.abs(toPlayer.y)
+            ? toPlayer.x < 0
+              ? "left"
+              : "right"
+            : toPlayer.y < 0
+              ? "up"
+              : "down";
+        this.enemyLastDir = dir;
+        const enemyAnimKey = `enemy_walk_${dir}`;
+        const enemyAnim = this.anims.get(enemyAnimKey);
+        if (enemyAnim && enemyAnim.frames.length > 0) {
+          this.enemy.anims.play(enemyAnimKey, true);
+        }
+      } else {
+        this.enemy.setVelocity(0, 0);
       }
     } else {
       this.enemy.setVelocity(0, 0);
@@ -393,8 +398,25 @@ class MainScene extends Phaser.Scene {
 
     this.enemy.setActive(true);
     this.enemy.setVisible(true);
-    this.enemy.body.enable = true;
+    this.enemy.body.enable = false;
     this.enemyHp = 20;
+    this.enemyEntering = true;
+    this.enemy.setPosition(GAME_WIDTH / 2, -200);
+    this.enemyLastDir = "down";
+    this.enemy.anims.play("enemy_walk_down", true);
+    this.tweens.add({
+      targets: this.enemy,
+      y: 120,
+      duration: 1600,
+      delay: 500,
+      ease: "Sine.easeOut",
+      onComplete: () => {
+        this.enemyEntering = false;
+        this.enemy.body.enable = true;
+        this.enemy.anims.stop();
+        this.enemy.setFrame(this.getEnemyIdleFrame(this.enemyLastDir));
+      }
+    });
 
     this.fireButton =
       document.querySelector<HTMLButtonElement>(".action-btn") || undefined;
