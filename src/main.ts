@@ -333,9 +333,6 @@ class MainScene extends Phaser.Scene {
 
         this.smokeEmitter?.stop();
         this.fireEmitter?.stop();
-        this.time.delayedCall(1500, () => {
-          this.electroEmitter?.stop();
-        });
 
         this.time.delayedCall(5000, () => {
           if (this.goodJobText) return;
@@ -479,7 +476,6 @@ class MainScene extends Phaser.Scene {
 
     startButton.addEventListener("click", () => this.startGame(), { once: true });
     startButton.addEventListener("touchstart", () => this.startGame(), { once: true });
-    startButton.addEventListener("pointerdown", () => this.startGame(), { once: true });
   }
 
   private getIdleFrame(dir: "down" | "left" | "right" | "up") {
