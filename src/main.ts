@@ -228,10 +228,13 @@ class MainScene extends Phaser.Scene {
         enemy.setVelocity(0, 0);
         enemy.setActive(true);
         enemy.setVisible(true);
+        enemy.setAlpha(1);
+        enemy.setDepth(5);
         enemy.body.enable = false;
         enemy.setRotation(-Math.PI / 2);
         enemy.setTint(0x222222);
         enemy.anims.stop();
+        enemy.setFrame(0);
       }
     );
 
