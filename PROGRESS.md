@@ -37,3 +37,5 @@ Progress Log
 - Bullets now aim forward if no enemy, and gently home toward enemies when present.
 - Enemy enters from above after a start countdown; Game Over halts gameplay.
 - Added explosion and game-over SFX hooks plus electric death effect for player.
+- Enemy VFX now follow the enemy reliably and are larger.
+- Player starts at the bottom of the canvas; enemy begins higher off-screen.

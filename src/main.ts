@@ -129,7 +129,7 @@ class MainScene extends Phaser.Scene {
     }).setOrigin(1, 0);
 
     this.player = this.physics.add
-      .sprite(120, 120, "roboman")
+      .sprite(120, GAME_HEIGHT - 120, "roboman")
       .setCollideWorldBounds(true);
     this.player.setDepth(2);
     this.player.setVisible(false);
@@ -137,7 +137,7 @@ class MainScene extends Phaser.Scene {
     this.player.body.enable = false;
 
     this.enemy = this.physics.add
-      .sprite(420, -80, "badguy1")
+      .sprite(420, -200, "badguy1")
       .setCollideWorldBounds(true);
     this.enemy.setDepth(1);
     this.enemy.setScale(3);
@@ -225,10 +225,10 @@ class MainScene extends Phaser.Scene {
       speedY: { min: -20, max: -50 },
       speedX: { min: -10, max: 10 },
       lifespan: 800,
-      scale: { start: 0.6, end: 1.2 },
+      scale: { start: 1.4, end: 2.6 },
       alpha: { start: 0.5, end: 0 },
-      quantity: 2,
-      frequency: 120
+      quantity: 6,
+      frequency: 80
     });
     smokeParticles.setDepth(3);
     this.smokeEmitter = smokeParticles;
@@ -238,10 +238,10 @@ class MainScene extends Phaser.Scene {
       speedY: { min: -30, max: -60 },
       speedX: { min: -10, max: 10 },
       lifespan: 500,
-      scale: { start: 0.7, end: 0.1 },
+      scale: { start: 1.6, end: 0.4 },
       alpha: { start: 0.8, end: 0 },
-      quantity: 2,
-      frequency: 90
+      quantity: 6,
+      frequency: 70
     });
     fireParticles.setDepth(3);
     this.fireEmitter = fireParticles;
@@ -412,7 +412,7 @@ class MainScene extends Phaser.Scene {
     if (this.enemyAlive) {
       if (this.enemyEntering) {
         this.enemy.setVelocity(0, this.enemySpeed * 0.6);
-        if (this.enemy.y > 100) {
+        if (this.enemy.y > 120) {
           this.enemyEntering = false;
         }
       } else {
@@ -458,6 +458,10 @@ class MainScene extends Phaser.Scene {
       this.enemy.setScale(3);
       this.enemy.anims.stop();
       this.enemy.setFrame(this.getEnemyIdleFrame(this.enemyLastDir));
+    }
+
+    if (this.enemyAlive) {
+      this.updateEnemyEffects();
     }
 
     this.updateBulletHoming();
@@ -530,7 +534,7 @@ class MainScene extends Phaser.Scene {
     this.enemyHpText.setText(`HP: ${this.enemyHp}`);
     this.updateEnemyEffects();
 
-    this.enemy.setPosition(Phaser.Math.Between(60, 480), -120);
+    this.enemy.setPosition(Phaser.Math.Between(60, 480), -200);
     this.enemyEntering = true;
     this.enemy.setVelocity(0, 0);
 
