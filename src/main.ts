@@ -322,11 +322,7 @@ class MainScene extends Phaser.Scene {
         this.playSfx(this.explosionSoundKey, 0.7);
 
         enemy.setVelocity(0, 0);
-        enemy.setScale(3);
-        enemy.setRotation(-Math.PI / 2);
-        enemy.setTint(0x222222);
-        this.electroEmitter?.setPosition(enemy.x, enemy.y);
-        this.electroEmitter?.start();
+        enemy.setScale(1.3);
         this.tweens.add({
           targets: enemy,
           scale: 0,
@@ -336,7 +332,6 @@ class MainScene extends Phaser.Scene {
             enemy.setVisible(false);
             enemy.setActive(false);
             enemy.body.enable = false;
-            this.electroEmitter?.stop();
           }
         });
 
@@ -617,8 +612,6 @@ class MainScene extends Phaser.Scene {
     this.electroEmitter?.stop();
     this.enemy.setPosition(420, 240);
     this.enemy.setScale(3);
-    this.enemy.setRotation(0);
-    this.enemy.clearTint();
     this.enemy.setVisible(true);
     this.enemy.setActive(true);
     this.enemy.body.enable = true;

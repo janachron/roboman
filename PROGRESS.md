@@ -39,4 +39,3 @@ Progress Log
 - Added explosion and game-over SFX hooks plus electric death effect for player.
 - Enemy VFX now follow the enemy reliably and are larger.
 - Player starts at the bottom of the canvas; enemy begins higher off-screen.
-- Enemy death now includes electric effect, 90° rotation, and darkened tint.
