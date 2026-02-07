@@ -189,7 +189,7 @@ export class MainScene extends Phaser.Scene {
       this.enemy.updateChase(this, this.player.sprite.x, this.player.sprite.y, this.enemySpeed);
     }
 
-    if (this.enemyHp > 0 && !this.enemy.dead && (!this.enemy.sprite.visible || !this.enemy.sprite.active)) {
+    if (!this.enemyEntering && this.enemyHp > 0 && !this.enemy.dead && (!this.enemy.sprite.visible || !this.enemy.sprite.active)) {
       this.enemy.sprite.setVisible(true);
       this.enemy.sprite.setActive(true);
       this.enemy.sprite.body.enable = true;
@@ -229,8 +229,10 @@ export class MainScene extends Phaser.Scene {
     this.enemyHp = 20;
     this.enemyEntering = true;
     const offscreenY = -Math.max(this.enemy.sprite.height, 80);
+    this.enemy.sprite.setActive(true);
     this.enemy.sprite.setVisible(false);
     this.enemy.sprite.setAlpha(0);
+    this.enemy.sprite.body.enable = false;
     this.enemy.sprite.setPosition(GAME_WIDTH / 2, offscreenY);
     this.enemy.sprite.setScale(1);
     this.enemy.lastDir = "down";
