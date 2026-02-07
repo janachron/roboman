@@ -33,9 +33,13 @@ class MainScene extends Phaser.Scene {
   private fireReady = true;
   private fireButton?: HTMLButtonElement;
   private lastDir: "down" | "left" | "right" | "up" = "down";
+  private readonly shotSoundKey = "sfx_shot";
+  private readonly explosionSoundKey = "sfx_explosion";
 
   preload() {
-    this.load.audio("theme", ["assets/audio/theme.mp3"]);
+    this.load.audio("theme", ["assets/audio/thelast-tothefuture.mp3"]);
+    this.load.audio(this.shotSoundKey, ["assets/audio/gunshot.mp3"]);
+    this.load.audio(this.explosionSoundKey, ["assets/audio/explosion.mp3"]);
     this.load.spritesheet("roboman", "assets/sprites/roboman-walk.png", {
       frameWidth: 41,
       frameHeight: 50
@@ -221,6 +225,7 @@ class MainScene extends Phaser.Scene {
         this.enemyHpText.setText(`HP: ${this.enemyHp}`);
         this.cameras.main.shake(180, 0.01);
         this.cameras.main.flash(200, 255, 120, 80);
+        this.playSfx(this.explosionSoundKey, 0.7);
 
         enemy.setVelocity(0, 0);
         enemy.setScale(1.3);
@@ -509,6 +514,7 @@ class MainScene extends Phaser.Scene {
 
     bullet.setVelocity(toEnemy.x, toEnemy.y);
     bullet.setRotation(Math.atan2(toEnemy.y, toEnemy.x));
+    this.playSfx(this.shotSoundKey, 0.4);
 
     this.time.delayedCall(900, () => {
       if (bullet.active) bullet.disableBody(true, true);
@@ -579,6 +585,11 @@ class MainScene extends Phaser.Scene {
     });
 
     window.addEventListener("blur", resetDpad);
+  }
+
+  private playSfx(key: string, volume: number) {
+    if (!this.cache.audio.exists(key)) return;
+    this.sound.play(key, { volume });
   }
 
 }
