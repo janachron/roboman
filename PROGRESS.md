@@ -40,4 +40,3 @@ Progress Log
 - Enemy VFX now follow the enemy reliably and are larger.
 - Player starts at the bottom of the canvas; enemy begins higher off-screen.
 - Enemy death now includes electric effect, 90° rotation, and darkened tint.
-- Enemy remains visible after death until Good Job is clicked.

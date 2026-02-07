@@ -327,9 +327,18 @@ class MainScene extends Phaser.Scene {
         enemy.setTint(0x222222);
         this.electroEmitter?.setPosition(enemy.x, enemy.y);
         this.electroEmitter?.start();
-        enemy.setVisible(true);
-        enemy.setActive(true);
-        enemy.body.enable = false;
+        this.tweens.add({
+          targets: enemy,
+          scale: 0,
+          duration: 260,
+          ease: "Back.In",
+          onComplete: () => {
+            enemy.setVisible(false);
+            enemy.setActive(false);
+            enemy.body.enable = false;
+            this.electroEmitter?.stop();
+          }
+        });
 
         this.smokeEmitter?.stop();
         this.fireEmitter?.stop();
@@ -602,7 +611,7 @@ class MainScene extends Phaser.Scene {
     this.enemyHp = 200;
     this.enemyAlive = true;
     this.enemyHpText.setText(`HP: ${this.enemyHp}`);
-    this.player.setPosition(120, GAME_HEIGHT - 120);
+    this.player.setPosition(120, 120);
     this.player.setRotation(0);
     this.player.clearTint();
     this.electroEmitter?.stop();
