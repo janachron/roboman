@@ -228,8 +228,12 @@ export class MainScene extends Phaser.Scene {
     this.enemy.resetState();
     this.enemyHp = 20;
     this.enemyEntering = true;
+    this.enemy.sprite.setVisible(false);
     this.enemy.sprite.setPosition(GAME_WIDTH / 2, -200);
+    this.enemy.sprite.setAlpha(1);
+    this.enemy.sprite.setScale(1);
     this.enemy.lastDir = "down";
+    this.enemy.sprite.setVisible(true);
     this.enemy.sprite.anims.play("enemy_walk_down", true);
     this.tweens.add({
       targets: this.enemy.sprite,
