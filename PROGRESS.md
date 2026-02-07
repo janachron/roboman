@@ -27,3 +27,4 @@ Progress Log
 - Renamed sprite sheet file to remove spaces for reliable loading.
 - Updated sprite sheet frame size to 41x50 based on the new 165x200 sheet.
 - Added `badguy1.png` sprite sheet (40x52) with directional enemy animations.
+- Adjusted badguy sprite frame height to 51 and guarded enemy animation playback.

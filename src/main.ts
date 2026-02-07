@@ -41,7 +41,7 @@ class MainScene extends Phaser.Scene {
     });
     this.load.spritesheet("badguy1", "assets/sprites/badguy1.png", {
       frameWidth: 40,
-      frameHeight: 52
+      frameHeight: 51
     });
 
     const gfx = this.add.graphics();
@@ -313,7 +313,11 @@ class MainScene extends Phaser.Scene {
             ? "up"
             : "down";
       this.enemyLastDir = dir;
-      this.enemy.anims.play(`enemy_walk_${dir}`, true);
+      const enemyAnimKey = `enemy_walk_${dir}`;
+      const enemyAnim = this.anims.get(enemyAnimKey);
+      if (enemyAnim && enemyAnim.frames.length > 0) {
+        this.enemy.anims.play(enemyAnimKey, true);
+      }
     } else {
       this.enemy.setVelocity(0, 0);
     }
