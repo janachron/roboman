@@ -74,7 +74,6 @@ export class Enemy {
     this.entering = false;
     this.sprite.setRotation(0);
     this.sprite.clearTint();
-    this.setActiveVisible(true);
   }
 
   updateChase(scene: Phaser.Scene, targetX: number, targetY: number, speed: number) {
