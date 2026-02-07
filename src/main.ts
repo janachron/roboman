@@ -461,11 +461,6 @@ class MainScene extends Phaser.Scene {
 
     if (this.enemyAlive) {
       this.updateEnemyEffects();
-    } else {
-      this.enemy.setVisible(true);
-      this.enemy.setActive(true);
-      this.enemy.setAlpha(1);
-      this.enemy.setScale(3);
     }
 
     this.updateBulletHoming();
@@ -484,9 +479,7 @@ class MainScene extends Phaser.Scene {
 
     startButton.addEventListener("click", () => this.startGame(), { once: true });
     startButton.addEventListener("touchstart", () => this.startGame(), { once: true });
-    startButton.addEventListener("touchend", () => this.startGame(), { once: true });
     startButton.addEventListener("pointerdown", () => this.startGame(), { once: true });
-    startButton.addEventListener("pointerup", () => this.startGame(), { once: true });
   }
 
   private getIdleFrame(dir: "down" | "left" | "right" | "up") {
